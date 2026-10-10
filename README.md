@@ -22,7 +22,29 @@ pnpm dev          # http://localhost:3000
 pnpm check        # audit tautan internal + tsc --noEmit (wajib hijau sebelum commit)
 pnpm check:data   # memeriksa angka generator + mesin metrik
 pnpm build        # produksi; 23 halaman, semua route terverifikasi
+pnpm start        # jalankan hasil build produksi
 ```
+
+### Uji end-to-end di browser sungguhan
+
+Uji ini benar-benar mengklik aplikasi: menambah produk di POS, menyelesaikan pembayaran,
+menolak PIN salah, menyetujui dengan PIN pemilik, menggeser slider What-If, mengganti tema,
+dan membuka semua halaman. Tanpa dependensi tambahan (memakai Chrome DevTools Protocol).
+
+```powershell
+# 1. jalankan build produksi
+pnpm build; pnpm start -- --port 3980
+
+# 2. jalankan Chrome headless dengan port debug
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" `
+  --headless=new --disable-gpu --no-sandbox --remote-debugging-port=9222 `
+  --user-data-dir="$env:TEMP\frizzy-e2e" about:blank
+
+# 3. jalankan uji
+node scripts/e2e.mjs http://127.0.0.1:3980 9222
+```
+
+Hasil terakhir: **27 lulus, 0 gagal**.
 
 Catatan lingkungan penting: file `pnpm-workspace.yaml` memakai `nodeLinker: hoisted`.
 Tanpa itu, `next build` gagal `MODULE_NOT_FOUND` karena Node di Windows tidak bisa menembus
@@ -104,14 +126,23 @@ kombinasi minimum agar True Burn tidak lagi positif.
 
 | Parameter | Nilai di data contoh |
 |---|---|
-| Prive pemilik | ~Rp 2,5 juta per hari, jauh di atas batas Rp 2 juta per bulan |
-| Belanja stok | ~93-99% HPP, dipotong lagi saat kas di bawah ambang (efek throttle kas) |
-| Model lama | iPhone 13/12 Ex, Galaxy A12, OPPO A54, Redmi 9A tidak lagi dicari pembeli |
+| Prive pemilik | ~Rp 2 juta per hari, jauh di atas batas Rp 2 juta per bulan |
+| Belanja stok | di bawah HPP, dipotong lagi saat kas menipis (efek throttle kas) |
+| Model lama | iPhone 13/12 Ex, Galaxy A12/A03, OPPO A54/A16, Redmi 9A, Vivo Y02 tidak lagi dicari pembeli |
 | Margin handset | Tererosi bertahap karena perang harga sepanjang periode |
 | Musiman | Gajian awal/akhir bulan, akhir pekan, Ramadan dan Lebaran |
 
-Hasil akhirnya: kas kritis (runway belasan sampai puluhan hari), stok mati menahan puluhan juta,
-dan rasio belanja stok di bawah 1. Itulah bahan bakar Cash Recovery Engine.
+Hasil akhirnya pada data contoh (angka ini berubah bila parameter di atas diubah):
+
+| Metrik | Nilai |
+|---|---|
+| Kas di tangan | Rp 7,8 juta |
+| Nilai stok (harga pokok) | Rp 264 juta, Rp 147 juta di antaranya stok mati 60 hari+ |
+| Laba kotor 30 hari | Rp 21 juta (margin 9,5%) |
+| True Burn | Rp 791 ribu per hari |
+| Runway | 10 hari (kritis) |
+| Rasio belanja stok | 77% dari HPP |
+| Skor pemulihan | 47/100 (waspada) |
 
 ---
 
@@ -156,9 +187,10 @@ scripts/
   biaya tetap adalah nilai awal yang bisa diubah di Pengaturan.
 - **AI Analyst** memakai jawaban terhitung dari mesin metrik, bukan panggilan model bahasa.
 - **Verifikasi otomatis**: `tsc --noEmit` bersih, audit tautan tanpa tautan mati, `next build`
-  menghasilkan 23 halaman, dan semua route dicek pada build produksi termasuk hidrasi klien
-  di POS, dashboard, recovery, keuangan, dan AI. Uji interaksi manual (klik-klik keranjang,
-  geser slider what-if) belum diotomatiskan.
+  menghasilkan 23 halaman, dan `scripts/e2e.mjs` menjalankan 27 pemeriksaan di browser sungguhan
+  (klik POS sampai struk terbit, gerbang PIN, slider What-If, tema, semua halaman) dengan hasil
+  **27 lulus, 0 gagal**. Yang belum diotomatiskan: unggah foto produk, cetak termal nyata, dan
+  pembayaran QRIS ke penyedia.
 
 ## Selanjutnya
 

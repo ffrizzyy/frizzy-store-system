@@ -78,6 +78,7 @@ export function PinGate() {
           </label>
           <input
             id="pin-input"
+            data-testid="pin-input"
             inputMode="numeric"
             autoComplete="off"
             maxLength={6}

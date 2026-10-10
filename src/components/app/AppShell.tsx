@@ -193,6 +193,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </button>
               <button
                 type="button"
+                data-testid="role-toggle"
                 onClick={() => setRole(role === "owner" ? "staff" : "owner")}
                 className="flex h-9 items-center gap-2 rounded-full border border-border-strong bg-surface px-3 text-[12px] font-medium text-text transition-colors hover:bg-surface-2"
                 title="Ganti peran untuk melihat batas akses"
@@ -200,7 +201,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <UserSwitch size={16} />
                 {role === "owner" ? "Pemilik" : "Staf"}
               </button>
-              <Button variant="ghost" size="icon" onClick={toggle} aria-label={theme === "dark" ? "Mode terang" : "Mode gelap"}>
+              <Button
+                variant="ghost"
+                size="icon"
+                data-testid="theme-toggle"
+                onClick={toggle}
+                aria-label={theme === "dark" ? "Mode terang" : "Mode gelap"}
+              >
                 {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
               </Button>
               <button

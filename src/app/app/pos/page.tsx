@@ -199,6 +199,8 @@ function PosWorkspace() {
         kind: blocked.some((b) => b.belowMinPrice) ? "below_min" : "discount",
         message: `${blocked.length} baris di bawah batas margin minimum. Minta pemilik menyetujui sebelum pembayaran.`,
         onApprove: () => {
+          setPayments([{ method: "cash", amount: totals.total }]);
+          setCashTendered(0);
           setPayOpen(true);
           toast({ title: "Disetujui", body: "Transaksi boleh dilanjutkan dengan harga khusus.", tone: "ok" });
         },
@@ -209,7 +211,11 @@ function PosWorkspace() {
       requestApproval({
         kind: "discount",
         message: `Diskon ${cartDiscountPct}% melebihi batas staf (${data.profile.staffDiscountLimitPct}%).`,
-        onApprove: () => setPayOpen(true),
+        onApprove: () => {
+          setPayments([{ method: "cash", amount: totals.total }]);
+          setCashTendered(0);
+          setPayOpen(true);
+        },
       });
       return;
     }
@@ -566,7 +572,7 @@ function PosWorkspace() {
               <Button variant="ghost" onClick={() => setPayOpen(false)}>
                 Batal
               </Button>
-              <Button variant="primary" size="lg" onClick={finalize} disabled={paidTotal < totals.total}>
+              <Button variant="primary" size="lg" onClick={finalize} disabled={paidTotal < totals.total} data-testid="finish-sale">
                 Selesaikan transaksi
               </Button>
             </div>
@@ -970,7 +976,7 @@ function CartPanel({
           </div>
         </dl>
 
-        <Button variant="primary" size="lg" block className="mt-3" onClick={onPay} disabled={cart.length === 0}>
+        <Button variant="primary" size="lg" block className="mt-3" onClick={onPay} disabled={cart.length === 0} data-testid="pay-button">
           Bayar {cart.length > 0 ? formatRupiah(totals.total) : ""}
         </Button>
         <p className="mt-2 text-center text-[11px] text-text-faint">F4 untuk membuka pembayaran</p>
@@ -1081,7 +1087,7 @@ function ReceiptPreview({
               <span>-{formatRupiah(sale.discountTotal)}</span>
             </div>
           ) : null}
-          <div className="flex justify-between font-bold">
+          <div className="flex justify-between font-bold" data-testid="receipt-total">
             <span>TOTAL</span>
             <span>{formatRupiah(sale.grandTotal)}</span>
           </div>

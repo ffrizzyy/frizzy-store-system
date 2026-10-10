@@ -91,31 +91,34 @@ type HandsetSeed = {
 };
 
 const HANDSETS: HandsetSeed[] = [
-  { sku: "SAM-A055-128", name: "Samsung Galaxy A05s 6/128", brand: "Samsung", cost: 1_720_000, price: 1_870_000, qty: 6, warranty: 12, demand: 8 },
-  { sku: "SAM-A155-256", name: "Samsung Galaxy A15 8/256", brand: "Samsung", cost: 2_480_000, price: 2_690_000, qty: 5, warranty: 12, demand: 7 },
+  { sku: "SAM-A055-128", name: "Samsung Galaxy A05s 6/128", brand: "Samsung", cost: 1_720_000, price: 1_870_000, qty: 8, warranty: 12, demand: 8 },
+  { sku: "SAM-A155-256", name: "Samsung Galaxy A15 8/256", brand: "Samsung", cost: 2_480_000, price: 2_690_000, qty: 7, warranty: 12, demand: 7 },
   { sku: "SAM-A255-256", name: "Samsung Galaxy A25 5G 8/256", brand: "Samsung", cost: 3_320_000, price: 3_590_000, qty: 4, warranty: 12, demand: 5 },
   { sku: "SAM-A356-256", name: "Samsung Galaxy A35 5G 8/256", brand: "Samsung", cost: 4_450_000, price: 4_790_000, qty: 3, warranty: 12, demand: 3 },
   { sku: "SAM-S921-256", name: "Samsung Galaxy S23 8/256", brand: "Samsung", cost: 7_900_000, price: 8_650_000, qty: 2, warranty: 12, demand: 1 },
-  { sku: "XIA-R12-256", name: "Xiaomi Redmi 12 8/256", brand: "Xiaomi", cost: 1_580_000, price: 1_730_000, qty: 7, warranty: 12, demand: 9 },
-  { sku: "XIA-N13-256", name: "Xiaomi Redmi Note 13 8/256", brand: "Xiaomi", cost: 2_180_000, price: 2_380_000, qty: 6, warranty: 12, demand: 8 },
-  { sku: "XIA-N13P-256", name: "Xiaomi Redmi Note 13 Pro 8/256", brand: "Xiaomi", cost: 3_150_000, price: 3_420_000, qty: 4, warranty: 12, demand: 5 },
+  { sku: "XIA-R12-256", name: "Xiaomi Redmi 12 8/256", brand: "Xiaomi", cost: 1_580_000, price: 1_730_000, qty: 9, warranty: 12, demand: 9 },
+  { sku: "XIA-N13-256", name: "Xiaomi Redmi Note 13 8/256", brand: "Xiaomi", cost: 2_180_000, price: 2_380_000, qty: 8, warranty: 12, demand: 8 },
+  { sku: "XIA-N13P-256", name: "Xiaomi Redmi Note 13 Pro 8/256", brand: "Xiaomi", cost: 3_150_000, price: 3_420_000, qty: 6, warranty: 12, demand: 5 },
   { sku: "XIA-14-256", name: "Xiaomi 14 12/256", brand: "Xiaomi", cost: 9_800_000, price: 10_600_000, qty: 2, warranty: 12, demand: 1 },
-  { sku: "OPP-A18-128", name: "OPPO A18 4/128", brand: "OPPO", cost: 1_380_000, price: 1_520_000, qty: 6, warranty: 12, demand: 7 },
-  { sku: "OPP-A78-256", name: "OPPO A78 8/256", brand: "OPPO", cost: 2_720_000, price: 2_950_000, qty: 5, warranty: 12, demand: 6 },
+  { sku: "OPP-A18-128", name: "OPPO A18 4/128", brand: "OPPO", cost: 1_380_000, price: 1_520_000, qty: 8, warranty: 12, demand: 7 },
+  { sku: "OPP-A78-256", name: "OPPO A78 8/256", brand: "OPPO", cost: 2_720_000, price: 2_950_000, qty: 7, warranty: 12, demand: 6 },
   { sku: "OPP-R11-256", name: "OPPO Reno 11 5G 8/256", brand: "OPPO", cost: 5_150_000, price: 5_550_000, qty: 3, warranty: 12, demand: 2 },
-  { sku: "VIV-Y17-128", name: "Vivo Y17s 6/128", brand: "Vivo", cost: 1_520_000, price: 1_670_000, qty: 5, warranty: 12, demand: 6 },
-  { sku: "VIV-Y28-256", name: "Vivo Y28 8/256", brand: "Vivo", cost: 2_150_000, price: 2_350_000, qty: 5, warranty: 12, demand: 6 },
+  { sku: "VIV-Y17-128", name: "Vivo Y17s 6/128", brand: "Vivo", cost: 1_520_000, price: 1_670_000, qty: 7, warranty: 12, demand: 6 },
+  { sku: "VIV-Y28-256", name: "Vivo Y28 8/256", brand: "Vivo", cost: 2_150_000, price: 2_350_000, qty: 7, warranty: 12, demand: 6 },
   { sku: "VIV-V29-256", name: "Vivo V29e 5G 8/256", brand: "Vivo", cost: 4_150_000, price: 4_480_000, qty: 3, warranty: 12, demand: 3 },
-  { sku: "REL-C55-128", name: "realme C55 6/128", brand: "realme", cost: 1_620_000, price: 1_770_000, qty: 5, warranty: 12, demand: 6 },
+  { sku: "REL-C55-128", name: "realme C55 6/128", brand: "realme", cost: 1_620_000, price: 1_770_000, qty: 7, warranty: 12, demand: 6 },
   { sku: "REL-11P-256", name: "realme 11 Pro 5G 8/256", brand: "realme", cost: 3_850_000, price: 4_150_000, qty: 3, warranty: 12, demand: 3 },
-  { sku: "INF-HOT40-256", name: "Infinix Hot 40i 8/256", brand: "Infinix", cost: 1_440_000, price: 1_580_000, qty: 5, warranty: 12, demand: 7 },
+  { sku: "INF-HOT40-256", name: "Infinix Hot 40i 8/256", brand: "Infinix", cost: 1_440_000, price: 1_580_000, qty: 7, warranty: 12, demand: 7 },
   { sku: "INF-NOTE40-256", name: "Infinix Note 40 8/256", brand: "Infinix", cost: 2_520_000, price: 2_750_000, qty: 4, warranty: 12, demand: 4 },
   { sku: "TEC-CAM30-256", name: "Tecno Camon 30 8/256", brand: "Tecno", cost: 2_950_000, price: 3_220_000, qty: 3, warranty: 12, demand: 3 },
-  { sku: "IPO-15-128", name: "iPhone 13 128GB Ex", brand: "Apple", cost: 6_450_000, price: 7_150_000, qty: 7, warranty: 6, stale: true, demand: 15 },
-  { sku: "IPO-12-64", name: "iPhone 12 64GB Ex", brand: "Apple", cost: 5_100_000, price: 5_700_000, qty: 7, warranty: 6, stale: true, demand: 15 },
-  { sku: "SAM-A125-128", name: "Samsung Galaxy A12 4/128 (lama)", brand: "Samsung", cost: 1_250_000, price: 1_390_000, qty: 12, warranty: 12, stale: true, demand: 15 },
-  { sku: "OPP-A54-128", name: "OPPO A54 4/128 (lama)", brand: "OPPO", cost: 1_450_000, price: 1_600_000, qty: 10, warranty: 12, stale: true, demand: 15 },
-  { sku: "XIA-9A-64", name: "Xiaomi Redmi 9A 4/64 (lama)", brand: "Xiaomi", cost: 780_000, price: 880_000, qty: 16, warranty: 12, stale: true, demand: 15 },
+  { sku: "IPO-15-128", name: "iPhone 13 128GB Ex", brand: "Apple", cost: 6_450_000, price: 7_150_000, qty: 5, warranty: 6, stale: true, demand: 15 },
+  { sku: "IPO-12-64", name: "iPhone 12 64GB Ex", brand: "Apple", cost: 5_100_000, price: 5_700_000, qty: 5, warranty: 6, stale: true, demand: 15 },
+  { sku: "SAM-A125-128", name: "Samsung Galaxy A12 4/128 (lama)", brand: "Samsung", cost: 1_250_000, price: 1_390_000, qty: 8, warranty: 12, stale: true, demand: 15 },
+  { sku: "OPP-A54-128", name: "OPPO A54 4/128 (lama)", brand: "OPPO", cost: 1_450_000, price: 1_600_000, qty: 7, warranty: 12, stale: true, demand: 15 },
+  { sku: "XIA-9A-64", name: "Xiaomi Redmi 9A 4/64 (lama)", brand: "Xiaomi", cost: 780_000, price: 880_000, qty: 10, warranty: 12, stale: true, demand: 15 },
+  { sku: "SAM-A035-64", name: "Samsung Galaxy A03 4/64 (lama)", brand: "Samsung", cost: 1_180_000, price: 1_320_000, qty: 12, warranty: 12, stale: true, demand: 15 },
+  { sku: "OPP-A16-64", name: "OPPO A16 4/64 (lama)", brand: "OPPO", cost: 1_050_000, price: 1_190_000, qty: 14, warranty: 12, stale: true, demand: 15 },
+  { sku: "VIV-Y02-32", name: "Vivo Y02 3/32 (lama)", brand: "Vivo", cost: 820_000, price: 940_000, qty: 16, warranty: 12, stale: true, demand: 15 },
 ];
 
 type StockSeed = {
@@ -437,9 +440,9 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
   /* --------------------------------------------------------------- kas */
 
   const accounts: Account[] = [
-    { id: "acc_drawer", name: "drawer", label: "Kas di laci", openingBalance: 6_100_000 },
-    { id: "acc_bank", name: "bank", label: "Rekening bank", openingBalance: 44_600_000 },
-    { id: "acc_ewallet", name: "ewallet", label: "E-wallet (DANA/OVO)", openingBalance: 1_850_000 },
+    { id: "acc_drawer", name: "drawer", label: "Kas di laci", openingBalance: 10_500_000 },
+    { id: "acc_bank", name: "bank", label: "Rekening bank", openingBalance: 38_400_000 },
+    { id: "acc_ewallet", name: "ewallet", label: "E-wallet (DANA/OVO)", openingBalance: 2_700_000 },
   ];
   const cashTransactions: CashTransaction[] = accounts.map((a, i) => ({
     id: uid("ctx"),
@@ -528,9 +531,9 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
     /* Anggaran belanja stok hari ini. Mendekati HPP hari ini, lalu dipotong
        kalau kas sudah menipis. Inilah mekanisme krisisnya. */
     const cogsEstimate = phoneCount * 2_300_000 + accCount * 34_000 + voucherCount * 24_000;
-    const wantBudget = rng.round500(rng.gauss(cogsEstimate * (0.94 + rng.next() * 0.06), 250_000));
+    const wantBudget = rng.round500(rng.gauss(cogsEstimate * (1.25 + rng.next() * 0.15), 300_000));
     const throttle =
-      cashAtDayStart < 6_000_000 ? 0.25 : cashAtDayStart < 12_000_000 ? 0.5 : cashAtDayStart < 22_000_000 ? 0.75 : 1;
+      cashAtDayStart < 5_000_000 ? 0.25 : cashAtDayStart < 10_000_000 ? 0.5 : cashAtDayStart < 18_000_000 ? 0.8 : 1;
     const budgetToday = Math.max(1_500_000, Math.round(wantBudget * throttle));
 
     const cashier = rng.pick(staffList);
@@ -579,12 +582,11 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
         const erodedPrice = rng.round500(product.price * (1 - (d / days) * 0.045));
         const nego = rng.chance(0.42) ? rng.next() * Math.max(0, Math.min(0.75, marginPct - 0.015)) : 0;
         const negoPrice = rng.round500(erodedPrice * (1 - nego));
-        const aggressive = rng.chance(0.05);
+        const aggressive = rng.chance(0.045);
         const finalPrice = aggressive
           ? rng.round500(product.cost * (0.965 + rng.next() * 0.03))
           : Math.max(negoPrice, product.minPrice);
         const discount = Math.max(0, product.price - finalPrice);
-
         qtyByProduct.set(product.id, (qtyByProduct.get(product.id) ?? 0) - 1);
         unit.status = "sold";
         unit.soldAt = new Date(dayStartMs + 12 * 3_600_000).toISOString();
@@ -1108,9 +1110,9 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
 
     /* ---- prive pemilik: terlalu sering dan terlalu besar, makin menjadi ---- */
     const drawT = d / days;
-    if (rng.chance(dow === 0 ? 0.6 : 0.85 + drawT * 0.2)) {
+    if (rng.chance(dow === 0 ? 0.6 : 0.9)) {
       const drawAt = new Date(dayStartMs + 20 * 3_600_000).toISOString();
-      const draw = rng.round500(2_250_000 + rng.next() * 900_000 + drawT * 400_000);
+      const draw = rng.round500(1_600_000 + rng.next() * 600_000);
       expenses.push({
         id: uid("exp"),
         category: "owner_draw",

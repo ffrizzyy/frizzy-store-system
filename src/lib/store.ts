@@ -163,7 +163,10 @@ export const useFrizzy = create<State>((set, get) => ({
     const data = get().data;
     if (!data) return;
     const user = role === "owner" ? data.users.find((u) => u.role === "owner") : data.users.find((u) => u.role === "staff");
-    set({ role, userId: user?.id ?? null, cart: [], cartCustomerId: null, cartDiscountPct: 0, approval: null });
+    /* Keranjang milik perangkat, bukan peran: staf dan pemilik sering bergantian
+       memakai tablet kasir yang sama, jadi isi keranjang tidak boleh hilang.
+       Yang direset hanya dialog persetujuan yang sedang terbuka. */
+    set({ role, userId: user?.id ?? null, approval: null });
   },
 
   requestApproval: (req) => set({ approval: req }),
