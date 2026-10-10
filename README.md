@@ -19,17 +19,25 @@ Seluruh angka di aplikasi ini berasal dari **generator data sintetis berskenario
 ```bash
 pnpm install
 pnpm dev          # http://localhost:3000
-pnpm typecheck    # tsc --noEmit (wajib hijau sebelum commit)
-node scripts/check-data.mjs   # memeriksa angka generator + mesin metrik
-node scripts/audit-links.mjs  # memeriksa tautan internal vs route yang ada
+pnpm check        # audit tautan internal + tsc --noEmit (wajib hijau sebelum commit)
+pnpm check:data   # memeriksa angka generator + mesin metrik
+pnpm build        # produksi; 23 halaman, semua route terverifikasi
 ```
 
 Catatan lingkungan penting: file `pnpm-workspace.yaml` memakai `nodeLinker: hoisted`.
 Tanpa itu, `next build` gagal `MODULE_NOT_FOUND` karena Node di Windows tidak bisa menembus
 junction virtual store pnpm untuk dependensi internal Next (`@next/env`, `@swc/helpers`).
 
+Dua halaman memakai `useSearchParams` untuk membaca `?tab=`. Keduanya **wajib** berada di dalam
+`<Suspense>` (`/app/inventory` dan `/app/products`); tanpa itu `next build` gagal dengan
+`missing-suspense-with-csr-bailout`. Ini sudah ditangani, jangan dilepas saat mengubah halaman itu.
+
 Font Geist di-*self-host* di `public/fonts` (skrip `scripts/fetch-fonts.mjs` hanya dijalankan
 sekali saat menyiapkan repo). Build tidak butuh jaringan.
+
+Batas galat sudah dipasang di tiga tingkat: `src/app/error.tsx` (halaman publik),
+`src/app/app/error.tsx` (segmen aplikasi, satu blok gagal tidak mengosongkan dashboard),
+dan `src/app/not-found.tsx` dengan daftar halaman yang tersedia.
 
 ---
 
@@ -147,6 +155,10 @@ scripts/
 - **Ambang default.** Batas diskon 5%, lantai kas aman Rp 5 juta, selisih kas Rp 20.000, dan
   biaya tetap adalah nilai awal yang bisa diubah di Pengaturan.
 - **AI Analyst** memakai jawaban terhitung dari mesin metrik, bukan panggilan model bahasa.
+- **Verifikasi otomatis**: `tsc --noEmit` bersih, audit tautan tanpa tautan mati, `next build`
+  menghasilkan 23 halaman, dan semua route dicek pada build produksi termasuk hidrasi klien
+  di POS, dashboard, recovery, keuangan, dan AI. Uji interaksi manual (klik-klik keranjang,
+  geser slider what-if) belum diotomatiskan.
 
 ## Selanjutnya
 
