@@ -683,6 +683,22 @@ export const useFrizzy = create<State>((set, get) => ({
 
 /* ---------------------------------------------------------------- selektor */
 
+/**
+ * Kendali kecil untuk membuka dialog yang dimiliki AppShell dari halaman mana
+ * pun (misalnya tombol "Tambah stok" di halaman Stok).
+ */
+type UiState = {
+  addStockOpen: boolean;
+  openAddStock: () => void;
+  closeAddStock: () => void;
+};
+
+export const useUi = create<UiState>((set) => ({
+  addStockOpen: false,
+  openAddStock: () => set({ addStockOpen: true }),
+  closeAddStock: () => set({ addStockOpen: false }),
+}));
+
 export function useData(): Dataset {
   const data = useFrizzy((s) => s.data);
   if (!data) throw new Error("Data belum dimuat");

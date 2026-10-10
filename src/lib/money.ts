@@ -34,6 +34,28 @@ export function formatAxis(value: number): string {
   return `${sign}${abs}`;
 }
 
+export type MoneyDisplay = { text: string; unit: string };
+
+/**
+ * Penampil uang untuk kartu KPI: angka tetap menjadi elemen terbesar tanpa
+ * pernah meluber keluar kartu. Nilai besar dipindah ke satuan juta supaya
+ * jumlah digitnya tetap pendek, dan satuannya ditulis kecil di sebelahnya.
+ *
+ *   Rp 264.530.250  ->  { text: "264,5", unit: "juta" }
+ *   Rp 7.781.106    ->  { text: "7.781.106", unit: "Rp" }
+ */
+export function formatMoneyDisplay(value: number): MoneyDisplay {
+  const sign = value < 0 ? "-" : "";
+  const abs = Math.abs(value);
+  if (abs >= 1_000_000_000) {
+    return { text: `${sign}${formatNumber(abs / 1_000_000_000, 2)}`, unit: "miliar" };
+  }
+  if (abs >= 10_000_000) {
+    return { text: `${sign}${formatNumber(abs / 1_000_000, 1)}`, unit: "juta" };
+  }
+  return { text: `${sign}${formatNumber(abs)}`, unit: "Rp" };
+}
+
 export function formatPct(value: number, decimals = 1): string {
   return `${value.toLocaleString("id-ID", {
     minimumFractionDigits: decimals,

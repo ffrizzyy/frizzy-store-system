@@ -25,7 +25,7 @@ import { PRODUCT_KIND_LABEL } from "@/lib/constants";
 import { formatDate, formatDateTime, formatNumber, formatPct, formatRupiah } from "@/lib/money";
 import { buildReorderPlan } from "@/lib/metrics";
 import type { ProductMetric, ReorderCandidate, ReorderPlan } from "@/lib/metrics";
-import { useFrizzy, type Mutation } from "@/lib/store";
+import { useFrizzy, useUi, type Mutation } from "@/lib/store";
 import type { ID, MovementReason, UnitStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Alert, Badge, EmptyState, Skeleton, type Tone } from "@/components/ui/Feedback";
@@ -135,6 +135,7 @@ function InventoryWorkspace() {
   const role = useFrizzy((s) => s.role);
   const toast = useFrizzy((s) => s.toast);
   const requestApproval = useFrizzy((s) => s.requestApproval);
+  const openAddStock = useUi((s) => s.openAddStock);
 
   const paramTab = searchParams.get("tab");
   const initialTab: TabId =
@@ -198,11 +199,20 @@ function InventoryWorkspace() {
       <SectionTitle
         eyebrow="Operasional"
         title="Stok"
-        hint="Level persediaan, ledger pergerakan, unit per IMEI, opname, penyesuaian, dan rencana belanja."
         right={
-          <div className="flex items-center gap-2 text-[12px] text-text-muted">
-            <Stack size={16} />
-            {formatNumber(totalSku)} SKU aktif
+          <div className="flex items-center gap-2">
+            <span className="flex items-center gap-2 text-[12px] text-text-muted">
+              <Stack size={16} />
+              {formatNumber(totalSku)} SKU aktif
+            </span>
+            <Button
+              variant="primary"
+              icon={<Plus size={16} weight="bold" />}
+              onClick={openAddStock}
+              data-testid="inventory-add-stock"
+            >
+              Tambah stok
+            </Button>
           </div>
         }
       />
@@ -404,9 +414,9 @@ function LevelTab({
                       <td className="px-4 py-3 text-text-muted">
                         {PRODUCT_KIND_LABEL[m.product.kind] ?? m.product.kind}
                       </td>
-                      <td className="num px-4 py-3 text-right text-text">
-                        {formatNumber(m.qty)}
-                        <span className="ml-1 text-[11px] text-text-faint">
+                      <td className="num px-4 py-3 text-right">
+                        <span className="block text-[14px] font-medium text-text">{formatNumber(m.qty)}</span>
+                        <span className="block text-[10.5px] text-text-faint">
                           min {formatNumber(m.product.reorderPoint)}
                         </span>
                       </td>

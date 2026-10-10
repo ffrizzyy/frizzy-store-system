@@ -359,6 +359,129 @@ async function testDashboardAndTheme() {
   record("Pilihan tema tersimpan", (await evaluate(`return window.localStorage.getItem("frizzy-theme") || "";`)) !== "");
 }
 
+async function testNotifications() {
+  /* Mulai dari kondisi bersih: penanda "sudah dibaca" tersimpan di localStorage,
+     jadi harus dihapus dulu supaya uji ini benar-benar menguji penandaan. */
+  await goto("/app", 3200);
+  await evaluate(`try { window.localStorage.removeItem("frizzy-alerts-seen"); } catch (e) {} return true;`);
+  await goto("/app", 3600);
+
+  const bell = await evaluate(`
+    const el = document.querySelector('[data-testid="notification-bell"]');
+    if (!el) return { found: false };
+    return { found: true, label: el.getAttribute("aria-label"), expanded: el.getAttribute("aria-expanded") };
+  `);
+  record("Tombol notifikasi tersedia dengan label aksesibel", bell.found === true && /notifikasi/i.test(bell.label ?? ""), bell.label ?? "");
+
+  const opened = await clickSelector('[data-testid="notification-bell"]');
+  await sleep(800);
+  const panel = await evaluate(`
+    const d = document.querySelector('[role="dialog"][aria-label="Notifikasi"]');
+    if (!d) return { open: false };
+    const items = [...d.querySelectorAll("li")].length;
+    const text = d.innerText;
+    return {
+      open: true,
+      items,
+      hasRunway: /runway/i.test(text),
+      hasRupiah: /Rp/.test(text),
+      hasAction: /Lihat|Buka|Tambah|Atur|Periksa|Simulasikan|Jalankan/i.test(text),
+    };
+  `);
+  record(
+    "Panel notifikasi berisi peringatan nyata (runway, rupiah, aksi)",
+    opened.ok === true && panel.open && panel.items >= 3 && panel.hasRunway && panel.hasRupiah && panel.hasAction,
+    `${panel.items} notifikasi`
+  );
+
+  const seen = await clickButton("Tandai terbaca");
+  await sleep(600);
+  const afterSeen = await evaluate(`
+    const el = document.querySelector('[data-testid="notification-bell"]');
+    return { label: el?.getAttribute("aria-label") ?? "", text: document.querySelector('[role="dialog"]')?.innerText ?? "" };
+  `);
+  record(
+    "Tandai terbaca menghapus penanda baru",
+    seen.ok === true && /tidak ada yang baru/i.test(afterSeen.label),
+    afterSeen.label
+  );
+
+  await evaluate(`document.querySelector('[role="dialog"] button[aria-label="Tutup notifikasi"]')?.click();`);
+  await sleep(400);
+}
+
+async function testAddStock() {
+  await goto("/app/inventory", 4200);
+
+  const open = await clickSelector('[data-testid="inventory-add-stock"]');
+  await sleep(900);
+  const dialog = await evaluate(`
+    const d = document.querySelector('[role="dialog"]');
+    if (!d) return { open: false };
+    const t = d.innerText;
+    return {
+      open: true,
+      hasTabs: ["Penyesuaian cepat", "Terima dari supplier", "Masuk per IMEI"].every((x) => t.includes(x)),
+      hasLedgerNote: /ledger stok/i.test(t),
+    };
+  `);
+  record("Tombol Tambah stok membuka dialog dari halaman Stok", open.ok === true && dialog.open && dialog.hasTabs);
+
+  const before = await evaluate(`
+    const rows = [...document.querySelectorAll("tbody tr")];
+    const first = rows[0];
+    return first ? first.innerText.replace(/\\n+/g, " | ").slice(0, 120) : "";
+  `);
+
+  /* Simpan nama produk yang dipilih di dialog, supaya angka stok produk itu
+     bisa dibandingkan sebelum dan sesudah penambahan. */
+  const chosen = await evaluate(`
+    const d = document.querySelector('[role="dialog"]');
+    const sel = d?.querySelector("select");
+    if (!sel) return { name: "", sku: "" };
+    const text = sel.options[sel.selectedIndex]?.textContent ?? "";
+    const sku = (text.match(/\\(([^)]+)\\)/) || ["", ""])[1];
+    return { name: text.replace(/\\s*\\([^)]*\\)\\s*$/, "").trim(), sku };
+  `);
+
+  const stockOf = (sku) => `
+    const rows = [...document.querySelectorAll("tbody tr")];
+    const row = rows.find((r) => r.innerText.includes(${JSON.stringify(sku)}));
+    if (!row) return null;
+    const cells = [...row.querySelectorAll("td")].map((c) => c.innerText.trim());
+    return { cells, row: row.innerText.replace(/\\n+/g, " | ").slice(0, 140) };
+  `;
+
+  const beforeRow = chosen.sku ? await evaluate(stockOf(chosen.sku)) : null;
+
+  const qtySet = await evaluate(`
+    const d = document.querySelector('[role="dialog"]');
+    const input = [...d.querySelectorAll("input")].find((i) => i.value === "1" || i.inputMode === "numeric");
+    if (!input) return false;
+    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+    setter.call(input, "5");
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  `);
+  record("Jumlah masuk dapat diubah", qtySet === true);
+
+  const confirm = await clickSelector('[data-testid="confirm-add-stock"]');
+  await sleep(1400);
+  const closed = await evaluate(`return !document.querySelector('[role="dialog"]');`);
+  const toast = await evaluate(`return document.body.innerText.includes("Stok ditambahkan");`);
+  record("Stok tersimpan, dialog tertutup, dan konfirmasi muncul", confirm.ok === true && closed && toast);
+
+  const afterRow = chosen.sku ? await evaluate(stockOf(chosen.sku)) : null;
+  const changed = beforeRow && afterRow && beforeRow.cells.join("|") !== afterRow.cells.join("|");
+  record(
+    "Angka stok produk yang dipilih ikut berubah di tabel",
+    changed === true,
+    chosen.sku ? `${chosen.sku}: ${beforeRow?.cells.join("/")} -> ${afterRow?.cells.join("/")}` : "produk tidak terdeteksi"
+  );
+  void before;
+}
+
 async function testAllRoutes() {
   const routes = [
     "/app/sales",
@@ -405,6 +528,8 @@ async function main() {
   await testPinGate();
   await testRecoveryTabs();
   await testDashboardAndTheme();
+  await testNotifications();
+  await testAddStock();
   await testAllRoutes();
 
   const passed = results.filter((r) => r.ok).length;

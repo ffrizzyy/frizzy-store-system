@@ -11,7 +11,7 @@ import {
   ClockCountdown,
   Package,
 } from "@phosphor-icons/react/dist/ssr";
-import { useFrizzy, useCtx } from "@/lib/store";
+import { useFrizzy, useCtx, useUi } from "@/lib/store";
 import {
   buildCashBridge,
   buildReorderPlan,
@@ -71,6 +71,7 @@ export default function DashboardPage() {
 /* ------------------------------------------------------------- pemilik */
 
 function OwnerDashboard() {
+  const openAddStock = useUi((s) => s.openAddStock);
   const ctx = useCtx();
   const data = ctx.data;
   const k = ctx.kpis;
@@ -421,7 +422,15 @@ function OwnerDashboard() {
       {/* --------------------------------------------------------- bawah */}
       <div className="grid gap-4 lg:grid-cols-3">
         <Card>
-          <CardHeader title="Stok menipis" hint="Di bawah titik pesan ulang" />
+          <CardHeader
+            title="Stok menipis"
+            hint="Di bawah titik pesan ulang"
+            action={
+              <Button variant="secondary" size="sm" icon={<Icon name="Plus" size={14} weight="bold" />} onClick={openAddStock} data-testid="dashboard-add-stock">
+                Tambah stok
+              </Button>
+            }
+          />
           {low.length === 0 ? (
             <EmptyState icon={<Package size={24} />} title="Stok aman" body="Tidak ada produk di bawah titik pesan ulang." />
           ) : (

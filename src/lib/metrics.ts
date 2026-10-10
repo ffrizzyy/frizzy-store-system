@@ -1143,9 +1143,12 @@ export function recoveryScore(ctx: Context): RecoveryScore {
 
 function actionFor(key: string, ctx: Context): string {
   const k = ctx.kpis;
+  const n = (v: number) => Math.round(v).toLocaleString("id-ID");
   switch (key) {
     case "runway":
-      return `Pangkas prive dan beban tetap. Setiap Rp 1 juta per bulan menambah sekitar ${Math.max(1, Math.round(1_000_000 / Math.max(1, k.trueBurnPerDay)))} hari runway.`;
+      return `Pangkas prive dan beban tetap. Setiap Rp 1 juta per bulan menambah sekitar ${n(
+        Math.max(1, 1_000_000 / Math.max(1, Math.abs(k.trueBurnPerDay)))
+      )} hari runway.`;
     case "replenish":
       return "Naikkan belanja stok ke 100% HPP setelah beban non-stok dipangkas.";
     case "leak":

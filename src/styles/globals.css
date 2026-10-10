@@ -195,6 +195,22 @@
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
   letter-spacing: -0.01em;
+  /* Angka uang tidak boleh patah ke baris berikutnya di dalam tabel. */
+  white-space: nowrap;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Angka panjang di dalam kartu sempit: kecilkan sedikit, tetap satu baris. */
+@utility num-tight {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
 }
 
 @utility card {

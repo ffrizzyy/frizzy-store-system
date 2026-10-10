@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Bell,
   CloudCheck,
   MagnifyingGlass,
   Moon,
@@ -14,16 +13,19 @@ import {
   List,
   X,
   Command,
+  Plus,
 } from "@phosphor-icons/react/dist/ssr";
 import { NAV, SHOP, Z } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { useFrizzy } from "@/lib/store";
+import { useFrizzy, useUi } from "@/lib/store";
 import { DivaCellLogo } from "@/components/brand/Logo";
 import { Badge, StatusDot } from "@/components/ui/Feedback";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Toaster } from "@/components/app/Toaster";
 import { PinGate } from "@/components/app/PinGate";
+import { NotificationBell } from "@/components/app/NotificationBell";
+import { AddStockDialog } from "@/components/app/AddStockDialog";
 
 function useTheme() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -57,8 +59,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const setRole = useFrizzy((s) => s.setRole);
   const data = useFrizzy((s) => s.data);
   const ctx = useFrizzy((s) => s.ctx);
+  const status = useFrizzy((s) => s.status);
   const [scrolled, setScrolled] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const stockOpen = useUi((s) => s.addStockOpen);
+  const openAddStock = useUi((s) => s.openAddStock);
+  const closeAddStock = useUi((s) => s.closeAddStock);
+  const ready = status === "ready";
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -191,6 +198,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <Command size={10} />K
                 </span>
               </button>
+              <Button
+                variant="secondary"
+                size="md"
+                className="hidden md:inline-flex"
+                onClick={openAddStock}
+                icon={<Plus size={16} weight="bold" />}
+                data-testid="open-add-stock"
+              >
+                Tambah stok
+              </Button>
               <button
                 type="button"
                 data-testid="role-toggle"
@@ -210,16 +227,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               >
                 {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
               </Button>
-              <button
-                type="button"
-                className="relative flex h-9 w-9 items-center justify-center rounded-[10px] text-text-muted transition-colors hover:bg-surface-2 hover:text-text"
-                aria-label="Notifikasi"
-              >
-                <Bell size={19} />
-                {critical ? (
-                  <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-danger" aria-hidden="true" />
-                ) : null}
-              </button>
+              {ready ? <NotificationBell /> : null}
             </div>
           </div>
           {critical ? (
@@ -355,6 +363,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <Toaster />
       <PinGate />
+      {ready && stockOpen ? <AddStockDialog open onClose={closeAddStock} /> : null}
     </div>
   );
 }
