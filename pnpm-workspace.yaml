@@ -1,0 +1,14 @@
+packages:
+  - "."
+
+# pnpm 11 tidak lagi membaca node-linker dari .npmrc.
+#
+# Alasan memakai hoisted: layout isolated bawaan membuat node_modules/next
+# sebagai junction ke virtual store pnpm. Di setup Windows ini Node tidak bisa
+# menyelesaikan dependensi internal Next (@next/env, @swc/helpers) lewat
+# junction tersebut, sehingga `next build` gagal dengan MODULE_NOT_FOUND.
+# Hoisted menghasilkan pohon datar tanpa junction yang bisa diselesaikan normal.
+nodeLinker: hoisted
+
+allowBuilds:
+  esbuild: true

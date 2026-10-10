@@ -1,0 +1,380 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   Font: Geist dan Geist Mono (variable, subset latin) di-host sendiri di
+   public/fonts supaya tidak ada permintaan ke Google saat runtime maupun build.
+   ========================================================================= */
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-geist: "Geist";
+  --font-geist-mono: "Geist Mono";
+}
+
+/* ============================================================================
+   Frizzy Design System
+   Satu palet, satu aksen. Basis netral: Zinc. Aksen: Emerald (uang, brand).
+   Warna semantik hanya untuk status. Semua angka memakai Geist Mono tabular.
+   ========================================================================= */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --surface-3: #ececee;
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-faint: #71717a;
+
+  --accent: #047857;
+  --accent-hover: #065f46;
+  --accent-soft: #ecfdf5;
+  --accent-ring: #34d399;
+  --on-accent: #ffffff;
+
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --danger: #be123c;
+  --danger-soft: #fff1f2;
+  --info: #1d4ed8;
+  --info-soft: #eff6ff;
+
+  --expense: #3f3f46;
+
+  --shadow-overlay: 0 12px 40px -12px rgb(4 120 87 / 0.18), 0 2px 8px -2px rgb(24 24 27 / 0.08);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root[data-theme="dark"] {
+  --bg: #09090b;
+  --surface: #111113;
+  --surface-2: #18181b;
+  --surface-3: #202024;
+  --border: #27272a;
+  --border-strong: #3f3f46;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-faint: #8b8b94;
+
+  --accent: #34d399;
+  --accent-hover: #6ee7b7;
+  --accent-soft: #052e22;
+  --accent-ring: #34d399;
+  --on-accent: #022c22;
+
+  --warning: #fbbf24;
+  --warning-soft: #2a1f05;
+  --danger: #fb7185;
+  --danger-soft: #2a0a12;
+  --info: #93c5fd;
+  --info-soft: #0b1a33;
+
+  --expense: #d4d4d8;
+
+  --shadow-overlay: 0 12px 40px -12px rgb(0 0 0 / 0.6), 0 2px 8px -2px rgb(0 0 0 / 0.4);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ring: var(--accent-ring);
+  --color-on-accent: var(--on-accent);
+
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-expense: var(--expense);
+
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --radius-control: 10px;
+  --radius-card: 16px;
+  --radius-overlay: 20px;
+
+  --shadow-overlay: var(--shadow-overlay);
+  --ease-out-quint: var(--ease-out);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-padding-top: 88px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--text);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  input,
+  button,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+}
+
+@utility num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: -0.01em;
+}
+
+@utility card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+@utility card-flat {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+@utility surface-sunken {
+  background-color: var(--surface-2);
+}
+
+@utility hairline {
+  border-top: 1px solid var(--border);
+}
+
+@utility label-caps {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+@utility measure {
+  max-width: 65ch;
+}
+
+/* Angka uang selalu muat dalam kartunya */
+@utility kpi-number {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+@utility scroll-x {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+@utility grain {
+  position: relative;
+}
+
+/* ---------------------------------------------------------------- animations */
+
+@keyframes fz-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fz-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fz-pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes fz-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes fz-draw {
+  from {
+    stroke-dashoffset: var(--dash, 400);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.reveal {
+  animation: fz-rise 0.6s var(--ease-out) both;
+}
+
+.reveal-2 {
+  animation: fz-rise 0.6s var(--ease-out) 0.08s both;
+}
+
+.reveal-3 {
+  animation: fz-rise 0.6s var(--ease-out) 0.16s both;
+}
+
+.fade-in {
+  animation: fz-fade 0.4s var(--ease-out) both;
+}
+
+.live-dot {
+  animation: fz-pulse-soft 2.4s ease-in-out infinite;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--surface-2);
+  border-radius: 8px;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent);
+  animation: fz-sweep 1.6s ease-in-out infinite;
+}
+
+:root[data-theme="dark"] .skeleton::after {
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.06), transparent);
+}
+
+.spark-line {
+  stroke-dasharray: var(--dash, 400);
+  animation: fz-draw 1.2s var(--ease-out) both;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* scrollbar yang tenang */
+.scroll-x::-webkit-scrollbar,
+.scroll-y::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.scroll-x::-webkit-scrollbar-thumb,
+.scroll-y::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 9999px;
+}
+
+.scroll-y {
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton::after {
+    display: none;
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "frizzy-store-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frizzy - sistem informasi stok dan penjualan konter Diva Cell, lengkap dengan Cash Recovery Engine",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "check:data": "node scripts/check-data.mjs",
+    "check:links": "node scripts/audit-links.mjs",
+    "check": "node scripts/audit-links.mjs && tsc --noEmit",
+    "icons": "python scripts/make-icon.py"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@radix-ui/react-dialog": "^1.2.0",
+    "@radix-ui/react-popover": "^1.2.0",
+    "@radix-ui/react-tabs": "^1.1.0",
+    "@swc/helpers": "^0.5.23",
+    "clsx": "^2.1.1",
+    "motion": "^14.0.0",
+    "next": "16.4.0",
+    "next-themes": "^0.4.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "recharts": "^3.10.1",
+    "tailwind-merge": "^3.7.0",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.2"
+  }
+}
