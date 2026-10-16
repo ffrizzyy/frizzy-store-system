@@ -16,7 +16,18 @@ pnpm build          # cetak jumlah halaman bila berhasil
 pnpm start          # http://localhost:3000
 ```
 
-Jalankan di port lain: `pnpm start -- --port 4000`.
+Jalankan di port lain lewat variabel `PORT` (bukan argumen `--port`, karena skrip `start`
+adalah `next start`):
+
+```bash
+PORT=4000 pnpm start              # bash
+$env:PORT=4000; corepack pnpm start   # PowerShell
+```
+
+> `next start` mencetak peringatan `"next start" does not work with "output: standalone"`
+> karena `next.config.ts` menyetel `output: "standalone"` untuk image Docker. Aplikasi tetap
+> berjalan normal; untuk jalur standalone murni, pakai `node server.js` dari dalam
+> `.next/standalone` (lihat bagian 4).
 
 > Jangan lupa `pnpm typecheck` sebelum build di CI. Repo ini sengaja memakai
 > `typescript.ignoreBuildErrors` agar `next build` tidak men-spawn `tsc` sendiri,
