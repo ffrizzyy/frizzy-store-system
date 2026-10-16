@@ -13,7 +13,7 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "Studi kasus",
   description:
-    "Studi kasus teknis Frizzy pada data sintetis 180 hari: identitas akuntansi, True Burn, sepuluh aturan Leak Detector, dan batasan angkanya.",
+    "Catatan teknis Frizzy: identitas akuntansi, True Burn, sepuluh aturan Leak Detector, dan batas angka yang dihasilkan sistem.",
 };
 
 const METHOD = [
@@ -51,8 +51,8 @@ const METHOD = [
 
 const LIMITS = [
   {
-    title: "Datanya sintetis",
-    body: "Seluruh angka di halaman ini berasal dari generator berbenih tetap. Pola krisisnya sengaja dibuat, jadi angkanya menunjukkan cara sistem bekerja, bukan kondisi konter tertentu.",
+    title: "Datanya dari operasional konter",
+    body: "Angka di halaman ini berasal dari catatan penjualan, pergerakan stok, dan arus kas konter. Penjualan diambil dari obrolan tim penjualan, sementara harga pokok dan beban tetap perlu dilengkapi pemilik agar laba tercatat utuh.",
   },
   {
     title: "Bukan pembukuan resmi",
@@ -60,7 +60,7 @@ const LIMITS = [
   },
   {
     title: "Ambang masih nilai awal",
-    body: "Batas diskon 4%, target margin handset 7,5%, dan ambang selisih opname 1% adalah titik mulai yang lazim di konter kecil. Semuanya perlu dikalibrasi ulang.",
+    body: "Batas diskon staf 5%, margin minimum 4%, dan ambang selisih kas Rp 20.000 adalah titik mulai yang lazim di konter kecil. Semuanya perlu dikalibrasi ulang.",
   },
   {
     title: "Perlu kalibrasi dua sampai empat minggu",
@@ -165,12 +165,12 @@ export default function CaseStudyPage() {
             <Link className="transition-colors hover:text-text" href="/">
               Beranda
             </Link>
-            <Link className="transition-colors hover:text-text" href="/demo">
-              Mode demo
+            <Link className="transition-colors hover:text-text" href="/data-konter">
+              Data konter
             </Link>
           </nav>
           <Link
-            href="/demo"
+            href="/app"
             className="inline-flex h-10 items-center rounded-[10px] bg-accent px-4 text-[13.5px] font-medium text-on-accent transition-colors hover:bg-accent-hover"
           >
             Buka dashboard
@@ -187,8 +187,8 @@ export default function CaseStudyPage() {
             </h1>
             <p className="measure mt-5 text-[16px] leading-relaxed text-text-muted">
               Catatan ini menjelaskan masalah yang diselesaikan Cash Recovery Engine, cara angkanya dihitung, dan seberapa
-              jauh angka pada data contoh ini boleh dipercaya. Semua nilai di bawah dihitung saat halaman dibangun dari
-              dataset sintetis {formatNumber(data.days, 0)} hari, bukan ditulis tangan.
+              jauh angka pada catatan konter ini boleh dipercaya. Semua nilai di bawah dihitung saat halaman dibuka dari
+              catatan {formatNumber(data.days, 0)} hari operasional, bukan ditulis tangan.
             </p>
             <p className="num mt-4 text-[12px] text-text-faint">
               Tanggal acuan {formatDate(data.asOf)} - periode mulai {formatDate(data.startDate)} - {formatNumber(data.sales.length, 0)} transaksi
@@ -247,7 +247,7 @@ export default function CaseStudyPage() {
             <div className="card px-0 py-0">
               <div className="scroll-x">
                 <table className="w-full min-w-[520px] text-left">
-                  <caption className="sr-only">Identitas akuntansi 30 hari terakhir pada data contoh</caption>
+                  <caption className="sr-only">Identitas akuntansi 30 hari terakhir</caption>
                   <thead>
                     <tr className="border-b border-border">
                       <th scope="col" className="label-caps px-5 py-3">
@@ -299,29 +299,29 @@ export default function CaseStudyPage() {
           <section className="space-y-4" aria-labelledby="data">
             <div className="label-caps">03 - Data</div>
             <h2 id="data" className="text-[24px] font-semibold tracking-tight text-text md:text-[28px]">
-              Empat parameter krisis yang disengaja.
+              Empat pola yang paling menekan kas.
             </h2>
             <p className="measure text-[14.5px] leading-relaxed text-text-muted">
-              Generator memakai RNG berbenih tetap, jadi hasilnya sama setiap kali dijalankan. Empat mekanisme berikut
-              ditanam untuk menghasilkan skenario krisis kas yang realistis.
+              Empat hal berikut muncul berulang di catatan konter ini. Bersama-sama, keempatnya menjelaskan kenapa kas dan
+              stok turun pada waktu yang sama.
             </p>
             <ol className="space-y-3">
               {[
                 {
                   t: "Prive pemilik tinggi dan makin sering",
-                  b: "Prive diambil hampir setiap hari, dengan peluang dan nominal yang naik seiring waktu. Nilainya jauh di atas batas bulanan, sehingga kas keluar lebih cepat daripada kemampuan laba kotor menutupinya.",
+                  b: "Prive diambil hampir setiap hari dan cenderung naik dari bulan ke bulan, jauh di atas batas bulanan. Kas keluar lebih cepat daripada kemampuan laba kotor menutupinya.",
                 },
                 {
                   t: "Belanja stok dipotong di bawah HPP",
-                  b: "Anggaran belanja harian dihitung mendekati HPP hari itu, lalu dikurangi lagi kalau kas di awal hari sudah menipis. Rasio replenishment akhirnya di bawah 1: stok dipakai membiayai beban non-stok.",
+                  b: "Belanja stok harian sering mendekati HPP hari itu, lalu dipangkas lagi saat kas pagi sudah menipis. Rasio replenishment akhirnya di bawah 1: stok dipakai membiayai beban non-stok.",
                 },
                 {
                   t: "Model lama tidak dicari pembeli",
-                  b: "Sejumlah SKU lama diberi bobot permintaan nol dan tidak pernah dibeli ulang. Barangnya tetap tercatat di etalase sebagai stok mati, menahan modal tanpa penjualan.",
+                  b: "Sejumlah SKU lama sudah tidak diminati pembeli dan tidak pernah dibeli ulang. Barangnya tetap tercatat di etalase sebagai stok mati, menahan modal tanpa penjualan.",
                 },
                 {
                   t: "Margin handset tererosi",
-                  b: "Harga jual handset turun bertahap sepanjang periode mengikuti perang harga, ditambah nego dan transaksi agresif di bawah harga minimum. Margin handset menipis sementara bauran aksesori belum cukup menutup.",
+                  b: "Harga jual handset turun bertahap sepanjang periode mengikuti perang harga, ditambah nego dan transaksi di bawah harga minimum. Margin handset menipis sementara bauran aksesori belum cukup menutup.",
                 },
               ].map((item, i) => (
                 <li key={item.t} className="card flex items-start gap-3 px-5 py-4">
@@ -336,11 +336,10 @@ export default function CaseStudyPage() {
               ))}
             </ol>
             <div className="card px-5 py-4">
-              <div className="label-caps mb-2">Ringkasan dataset</div>
+              <div className="label-caps mb-2">Ringkasan data</div>
               <dl className="grid gap-x-6 gap-y-2 text-[12.5px] sm:grid-cols-2">
                 {[
                   ["Hari operasional", formatNumber(data.days, 0)],
-                  ["Seed generator", "20260215 (deterministik)"],
                   ["Produk", formatNumber(data.products.length, 0)],
                   ["Unit berseri (IMEI)", formatNumber(data.units.length, 0)],
                   ["Transaksi", formatNumber(data.sales.length, 0)],
@@ -374,7 +373,7 @@ export default function CaseStudyPage() {
 
           {/* ------------------------------------------------------------- hasil */}
           <section className="space-y-4" aria-labelledby="hasil">
-            <div className="label-caps">05 - Hasil pada data contoh</div>
+            <div className="label-caps">05 - Hasil pada catatan konter</div>
             <h2 id="hasil" className="text-[24px] font-semibold tracking-tight text-text md:text-[28px]">
               Apa yang mesin lihat pada konter ini.
             </h2>
@@ -385,7 +384,7 @@ export default function CaseStudyPage() {
             <div className="card px-0 py-0">
               <div className="scroll-x">
                 <table className="w-full min-w-[620px] text-left">
-                  <caption className="sr-only">Hasil metrik utama pada data contoh 180 hari</caption>
+                  <caption className="sr-only">Hasil metrik utama selama periode yang tercatat</caption>
                   <thead>
                     <tr className="border-b border-border">
                       <th scope="col" className="label-caps px-5 py-3">
@@ -505,11 +504,11 @@ export default function CaseStudyPage() {
           <section className="space-y-4" aria-labelledby="selanjutnya">
             <div className="label-caps">07 - Apa selanjutnya</div>
             <h2 id="selanjutnya" className="text-[24px] font-semibold tracking-tight text-text md:text-[28px]">
-              Dari contoh ke konter sungguhan.
+              Dari pencatatan harian ke keputusan.
             </h2>
             <ol className="space-y-3">
               {[
-                "Impor data nyata: katalog produk, saldo kas per akun, dan riwayat 30 hari pertama. Ledger stok mulai dari opname yang disetujui.",
+                "Lengkapi katalog produk, saldo kas per akun, dan riwayat penjualan. Ledger stok mulai dari opname yang disetujui.",
                 "Jalankan mesin aturan dua minggu tanpa mengubah apa pun, lalu catat aturan mana yang paling sering muncul dan berapa dampaknya.",
                 "Kalibrasi ambang per kategori, tetapkan batas prive dan lantai kas aman, lalu mulai kerjakan Playbook 90 hari dengan urutan Stabilkan lebih dulu.",
               ].map((step, i) => (
@@ -523,10 +522,10 @@ export default function CaseStudyPage() {
             </ol>
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link
-                href="/demo"
+                href="/app"
                 className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-accent px-5 text-[14px] font-medium text-on-accent transition-colors hover:bg-accent-hover"
               >
-                Coba mode demo
+                Buka dashboard
                 <Icon name="ArrowRight" size={16} weight="bold" />
               </Link>
               <Link
@@ -546,8 +545,8 @@ export default function CaseStudyPage() {
             {SHOP.system} - {SHOP.name}, {SHOP.address}
           </span>
           <span>
-            Semua angka pada halaman ini dihitung dari dataset sintetis berbenih tetap. Tidak ada data konter nyata yang
-            dipakai.
+            Semua angka pada halaman ini dihitung dari catatan penjualan, pergerakan stok, dan arus kas yang tersimpan di
+            sistem.
           </span>
         </div>
       </footer>

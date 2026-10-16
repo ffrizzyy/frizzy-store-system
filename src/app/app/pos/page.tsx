@@ -127,7 +127,9 @@ function PosWorkspace() {
         p.barcode.includes(q)
       );
     });
-    return filtered.slice(0, 60);
+    /* Katalog nyata berisi ratusan SKU. Tampilkan seluruh hasil filter; batas
+       tinggi hanya sebagai pengaman agar tidak merender ribuan kartu sekaligus. */
+    return filtered.slice(0, 300);
   }, [data.products, kindFilter, query]);
 
   const marginGuard = useMemo(() => {

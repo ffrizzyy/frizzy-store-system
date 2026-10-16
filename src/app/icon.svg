@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Diva Cell">
+  <title>Diva Cell</title>
+  <!-- Bidang gelap membulat: mark asli memang putih di atas hitam. -->
+  <rect width="512" height="512" rx="112" fill="#111214" />
+  <!--
+    Mark memakai path yang sama dengan src/components/brand/Logo.tsx. Path itu
+    dinormalkan dari kotak asli 572 x 273 piksel (landscape) ke viewBox persegi
+    0..100, jadi WAJIB preserveAspectRatio="none": tanpa itu mark di-letterbox
+    dan tampak persegi/terlalu tinggi. Kotak 368.64 x 175.94 = 2.095:1,
+    diletakkan di tengah dengan margin aman ~14% tiap sisi.
+  -->
+  <svg x="71.68" y="168.029" width="368.64" height="175.942" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <path d="M19.23 0 L38.11 39.56 L47.38 39.56 L51.75 30.4 L42.48 30.04 L28.15 0 Z" fill="#FFFFFF" />
+    <path d="M57.34 0 L43.01 30.04 L51.92 30.04 L66.26 0 Z" fill="#FFFFFF" />
+    <path d="M71.5 0 L67.13 9.16 L76.22 9.52 L90.56 39.56 L99.65 39.56 L80.59 0 Z" fill="#FFFFFF" />
+    <path d="M0 2.93 L0 19.05 L14.51 49.45 L0 80.59 L0 96.7 L1.22 96.7 L18.71 60.07 L18.88 39.93 L1.22 2.93 Z" fill="#FFFFFF" />
+    <path d="M66.96 9.52 L52.62 39.56 L61.54 39.56 L75.87 9.52 Z" fill="#FFFFFF" />
+    <path d="M5.07 0 L23.95 39.56 L32.87 39.56 L13.99 0 Z" fill="#E2683A" />
+  </svg>
+</svg>

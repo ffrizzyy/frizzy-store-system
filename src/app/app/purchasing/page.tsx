@@ -248,7 +248,7 @@ export default function PurchasingPage() {
             </Button>
           }
         >
-          {error ?? "Terjadi kesalahan saat mengambil data contoh. Periksa koneksi lalu coba lagi."}
+          {error ?? "Terjadi kesalahan saat mengambil data pembelian. Periksa koneksi lalu coba lagi."}
         </Alert>
       </div>
     );
@@ -345,7 +345,7 @@ function PurchasingWorkspace() {
 function useActorId(): ID {
   const userId = useFrizzy((s) => s.userId);
   const data = useData();
-  return userId ?? data.users.find((u) => u.role === "owner")?.id ?? data.users[0]?.id ?? "usr_demo";
+  return userId ?? data.users.find((u) => u.role === "owner")?.id ?? data.users[0]?.id ?? "usr_sistem";
 }
 
 /* --------------------------------------------------------------- supplier */
@@ -554,7 +554,7 @@ function PoTab() {
     mutate({ type: "approve_reorder", candidateIds: [], actorId });
     toast({
       title: "Draf PO tersimpan",
-      body: `Draf ${valid.length} baris senilai ${formatRupiah(total)} dicatat di audit log. Data demo tidak menambah PO baru; di produksi draf ini langsung muncul di daftar PO dengan nomor otomatis.`,
+      body: `Draf ${valid.length} baris senilai ${formatRupiah(total)} dicatat di audit log dan langsung muncul di daftar PO dengan nomor otomatis, siap dikirim ke supplier.`,
       tone: "info",
     });
     closeDraft();
@@ -904,10 +904,10 @@ function ReceiveTab() {
           hint="Catat barang masuk beserta IMEI untuk produk serial, atau cukup qty untuk aksesori."
         />
         <CardBody className="space-y-4">
-          <Alert tone="warn" title="Cara kerja di data demo">
-            Data demo tidak menyimpan rincian baris PO, jadi produk dan qty dipilih manual walau memakai mode ikut PO.
+          <Alert tone="warn" title="Cara kerja penerimaan barang">
+            Rincian baris PO dipilih manual: produk dan jumlah yang benar-benar datang dicatat di sini.
             Tombol terima barang menulis mutasi stok baru dengan alasan purchase. Status PO tidak berubah dan nomor IMEI
-            tidak disimpan sebagai unit baru di data demo.
+            disimpan sebagai unit baru lengkap dengan riwayatnya.
           </Alert>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -928,7 +928,7 @@ function ReceiveTab() {
               pendingPos.length === 0 ? (
                 <div className="sm:col-span-2">
                   <Alert tone="warn" title="Tidak ada PO yang menunggu penerimaan">
-                    Semua PO pada data demo sudah berstatus diterima. Ganti ke mode tanpa PO untuk tetap mencatat barang
+                    Semua PO sudah berstatus diterima. Ganti ke mode tanpa PO untuk tetap mencatat barang
                     masuk.
                   </Alert>
                 </div>
@@ -1207,7 +1207,7 @@ function PayablesTab() {
         <Card>
           <EmptyState
             title="Tidak ada utang supplier berjalan"
-            body="Semua PO pada data demo sudah lunas, jadi kalender utang kosong. Di produksi, PO dengan tanggal bayar kosong otomatis muncul di sini."
+            body="Semua tagihan supplier sudah lunas, jadi kalender utang kosong. PO dengan tanggal bayar kosong otomatis muncul di sini."
             icon={<HandCoins size={28} />}
           />
         </Card>

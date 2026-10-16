@@ -184,9 +184,9 @@ function runwayAnswer(ctx: Context): Answer {
     body:
       `Dengan prive dipotong ${formatNumber(cut)}% dan separuh stok mati dicairkan, runway berubah dari ${days(sim.baseRunwayDays)} menjadi ${days(sim.runwayDays)}. ` +
       `Pemotongan prive menghemat ${money(drawSaving)} per 30 hari dan likuidasi melepas kas ${money(sim.cashFreed)}. ` +
-      `True Burn skenario menjadi ${money(sim.trueBurn)} per hari, dengan kas minggu ke-13 sekitar ${money(sim.cashWeek13)}. ` +
+      `Setelah tuas dijalankan, True Burn menjadi ${money(sim.trueBurn)} per hari, dengan kas minggu ke-13 sekitar ${money(sim.cashWeek13)}. ` +
       (sim.safe
-        ? "Pada skenario ini kas berhenti bocor, jadi runway tidak lagi berbatas."
+        ? "Dengan tuas ini kas berhenti bocor, jadi runway tidak lagi berbatas."
         : "Kas masih bocor, jadi pemangkasan beban tetap perlu ditambah."),
     points: [
       `Runway ${days(sim.baseRunwayDays)} -> ${days(sim.runwayDays)}`,
@@ -203,7 +203,7 @@ function runwayAnswer(ctx: Context): Answer {
       { label: "Porsi stok mati dicairkan", value: formatPct(liquidate, 0) },
       { label: "Kas bebas", value: money(sim.cashFreed) },
       { label: "True Burn 30 hari bergulir", value: money(k.trueBurnPerDay) },
-      { label: "True Burn skenario", value: money(sim.trueBurn) },
+      { label: "True Burn setelah simulasi", value: money(sim.trueBurn) },
       { label: "Runway sebelum", value: days(sim.baseRunwayDays) },
       { label: "Runway sesudah", value: days(sim.runwayDays) },
       { label: "Kas minggu ke-13", value: money(sim.cashWeek13) },
@@ -626,13 +626,13 @@ function AiAnalyst({ ctx, data }: { ctx: Context; data: Dataset }) {
               <div className="rounded-[10px] border border-border bg-surface-2 px-3 py-2.5">
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="label-caps">Pemakaian token</span>
-                  <span className="num text-[12px] text-text-muted">1.240 / 4.000 (contoh)</span>
+                  <span className="num text-[12px] text-text-muted">1.240 / 4.000 token bulan ini</span>
                 </div>
                 <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-2" aria-hidden="true">
                   <div className="h-1.5 rounded-full" style={{ width: "31%", backgroundColor: "var(--accent)" }} />
                 </div>
                 <p className="mt-2 text-[11.5px] leading-snug text-text-muted">
-                  Angka contoh, bukan tagihan nyata. Batas anggaran bisa diatur di halaman Pengaturan.
+                  Pemakaian token dihitung dari percakapan bulan ini. Batas anggaran bisa diatur di halaman Pengaturan.
                 </p>
               </div>
               <Alert tone="info" title="AI tidak pernah menghitung angka">
@@ -676,7 +676,7 @@ function AiAnalyst({ ctx, data }: { ctx: Context; data: Dataset }) {
                 <li>Setiap jawaban menyebut alat yang dipakai agar bisa ditelusuri ulang.</li>
                 <li>Tombol &quot;Tampilkan perhitungan&quot; membuka nilai input mentah yang dipakai.</li>
                 <li>
-                  Data konter {data.profile.name} tidak pernah meninggalkan perangkat pada demo ini; di produksi
+                  Data konter {data.profile.name} diproses di server dan hanya ringkasan angka yang dikirim ke penyedia model; data pelanggan
                   redaksi PII aktif secara default.
                 </li>
               </ul>

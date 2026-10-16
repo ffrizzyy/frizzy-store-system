@@ -42,10 +42,17 @@ export function DivaCellMark({
   const height = size;
   const width = Math.round(size * MARK_RATIO);
 
+  /*
+   * WAJIB preserveAspectRatio="none": path di atas dinormalkan dari kotak
+   * asli 572 x 273 piksel (landscape) ke viewBox persegi 0..100. Dengan
+   * "meet" viewBox persegi itu di-letterbox di dalam viewport lebar, sehingga
+   * mark tampak persegi/terlalu tinggi. "none" meregangkan viewBox persegi
+   * kembali ke rasio asli 572/273 = 2,095:1.
+   */
   const mark = (
     <svg
       viewBox="0 0 100 100"
-      preserveAspectRatio="xMidYMid meet"
+      preserveAspectRatio="none"
       width={width}
       height={height}
       role="img"

@@ -1,12 +1,18 @@
 /* ============================================================================
-   Generator data seed Frizzy, deterministik (seeded RNG).
-   Menghasilkan 180 hari operasional konter Diva Cell dengan skenario
-   "cash crisis" yang disengaja: prive pemilik terlalu besar, stok mati
-   menumpuk, dan rasio replenishment di bawah 1 (stok dipakai untuk
-   membiayai beban non-stok).
+   Perakit dataset operasional konter Diva Cell, deterministik (seeded RNG).
+
+   Penjualan handset diambil dari data NYATA hasil ekstraksi obrolan WhatsApp
+   (src/lib/penjualan-nyata.ts melalui src/lib/realSales.ts): tanggal, jam,
+   model, dan harga tiap unit sesuai catatan konter. Model handset di katalog
+   juga diturunkan dari data itu.
+
+   Entitas pendukung yang tidak ada di obrolan tetap dibangkitkan secara
+   deterministik: penjualan aksesori/voucher/jasa, stok dan penerimaan barang,
+   kas, beban, prive, shift, pembelian, piutang, dan opname.
    ========================================================================= */
 
 import { AS_OF, HISTORY_DAYS, SHOP } from "./constants";
+import { REAL_SALES_BY_DATE, realHandsetSeeds } from "./realSales";
 import type {
   Account,
   AuditEntry,
@@ -76,50 +82,9 @@ const uid = (prefix: string): ID => `${prefix}_${(++counter).toString(36).padSta
 
 /* ------------------------------------------------------------------- katalog */
 
-type HandsetSeed = {
-  sku: string;
-  name: string;
-  brand: string;
-  cost: number;
-  price: number;
-  qty: number;
-  /** true = model yang sengaja dibuat menua (calon stok mati) */
-  stale?: boolean;
-  warranty: number;
-  /** bobot minat beli relatif */
-  demand: number;
-};
-
-const HANDSETS: HandsetSeed[] = [
-  { sku: "SAM-A055-128", name: "Samsung Galaxy A05s 6/128", brand: "Samsung", cost: 1_720_000, price: 1_870_000, qty: 8, warranty: 12, demand: 8 },
-  { sku: "SAM-A155-256", name: "Samsung Galaxy A15 8/256", brand: "Samsung", cost: 2_480_000, price: 2_690_000, qty: 7, warranty: 12, demand: 7 },
-  { sku: "SAM-A255-256", name: "Samsung Galaxy A25 5G 8/256", brand: "Samsung", cost: 3_320_000, price: 3_590_000, qty: 4, warranty: 12, demand: 5 },
-  { sku: "SAM-A356-256", name: "Samsung Galaxy A35 5G 8/256", brand: "Samsung", cost: 4_450_000, price: 4_790_000, qty: 3, warranty: 12, demand: 3 },
-  { sku: "SAM-S921-256", name: "Samsung Galaxy S23 8/256", brand: "Samsung", cost: 7_900_000, price: 8_650_000, qty: 2, warranty: 12, demand: 1 },
-  { sku: "XIA-R12-256", name: "Xiaomi Redmi 12 8/256", brand: "Xiaomi", cost: 1_580_000, price: 1_730_000, qty: 9, warranty: 12, demand: 9 },
-  { sku: "XIA-N13-256", name: "Xiaomi Redmi Note 13 8/256", brand: "Xiaomi", cost: 2_180_000, price: 2_380_000, qty: 8, warranty: 12, demand: 8 },
-  { sku: "XIA-N13P-256", name: "Xiaomi Redmi Note 13 Pro 8/256", brand: "Xiaomi", cost: 3_150_000, price: 3_420_000, qty: 6, warranty: 12, demand: 5 },
-  { sku: "XIA-14-256", name: "Xiaomi 14 12/256", brand: "Xiaomi", cost: 9_800_000, price: 10_600_000, qty: 2, warranty: 12, demand: 1 },
-  { sku: "OPP-A18-128", name: "OPPO A18 4/128", brand: "OPPO", cost: 1_380_000, price: 1_520_000, qty: 8, warranty: 12, demand: 7 },
-  { sku: "OPP-A78-256", name: "OPPO A78 8/256", brand: "OPPO", cost: 2_720_000, price: 2_950_000, qty: 7, warranty: 12, demand: 6 },
-  { sku: "OPP-R11-256", name: "OPPO Reno 11 5G 8/256", brand: "OPPO", cost: 5_150_000, price: 5_550_000, qty: 3, warranty: 12, demand: 2 },
-  { sku: "VIV-Y17-128", name: "Vivo Y17s 6/128", brand: "Vivo", cost: 1_520_000, price: 1_670_000, qty: 7, warranty: 12, demand: 6 },
-  { sku: "VIV-Y28-256", name: "Vivo Y28 8/256", brand: "Vivo", cost: 2_150_000, price: 2_350_000, qty: 7, warranty: 12, demand: 6 },
-  { sku: "VIV-V29-256", name: "Vivo V29e 5G 8/256", brand: "Vivo", cost: 4_150_000, price: 4_480_000, qty: 3, warranty: 12, demand: 3 },
-  { sku: "REL-C55-128", name: "realme C55 6/128", brand: "realme", cost: 1_620_000, price: 1_770_000, qty: 7, warranty: 12, demand: 6 },
-  { sku: "REL-11P-256", name: "realme 11 Pro 5G 8/256", brand: "realme", cost: 3_850_000, price: 4_150_000, qty: 3, warranty: 12, demand: 3 },
-  { sku: "INF-HOT40-256", name: "Infinix Hot 40i 8/256", brand: "Infinix", cost: 1_440_000, price: 1_580_000, qty: 7, warranty: 12, demand: 7 },
-  { sku: "INF-NOTE40-256", name: "Infinix Note 40 8/256", brand: "Infinix", cost: 2_520_000, price: 2_750_000, qty: 4, warranty: 12, demand: 4 },
-  { sku: "TEC-CAM30-256", name: "Tecno Camon 30 8/256", brand: "Tecno", cost: 2_950_000, price: 3_220_000, qty: 3, warranty: 12, demand: 3 },
-  { sku: "IPO-15-128", name: "iPhone 13 128GB Ex", brand: "Apple", cost: 6_450_000, price: 7_150_000, qty: 5, warranty: 6, stale: true, demand: 15 },
-  { sku: "IPO-12-64", name: "iPhone 12 64GB Ex", brand: "Apple", cost: 5_100_000, price: 5_700_000, qty: 5, warranty: 6, stale: true, demand: 15 },
-  { sku: "SAM-A125-128", name: "Samsung Galaxy A12 4/128 (lama)", brand: "Samsung", cost: 1_250_000, price: 1_390_000, qty: 8, warranty: 12, stale: true, demand: 15 },
-  { sku: "OPP-A54-128", name: "OPPO A54 4/128 (lama)", brand: "OPPO", cost: 1_450_000, price: 1_600_000, qty: 7, warranty: 12, stale: true, demand: 15 },
-  { sku: "XIA-9A-64", name: "Xiaomi Redmi 9A 4/64 (lama)", brand: "Xiaomi", cost: 780_000, price: 880_000, qty: 10, warranty: 12, stale: true, demand: 15 },
-  { sku: "SAM-A035-64", name: "Samsung Galaxy A03 4/64 (lama)", brand: "Samsung", cost: 1_180_000, price: 1_320_000, qty: 12, warranty: 12, stale: true, demand: 15 },
-  { sku: "OPP-A16-64", name: "OPPO A16 4/64 (lama)", brand: "OPPO", cost: 1_050_000, price: 1_190_000, qty: 14, warranty: 12, stale: true, demand: 15 },
-  { sku: "VIV-Y02-32", name: "Vivo Y02 3/32 (lama)", brand: "Vivo", cost: 820_000, price: 940_000, qty: 16, warranty: 12, stale: true, demand: 15 },
-];
+/* Katalog handset, harga pokok, dan bobot permintaan diturunkan dari data
+   penjualan nyata di ./realSales.ts. Tidak ada daftar model yang ditulis
+   tangan di sini supaya katalog selalu ikut data terbaru. */
 
 type StockSeed = {
   sku: string;
@@ -326,14 +291,15 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
   const units: InventoryUnit[] = [];
   const qtyByProduct = new Map<ID, number>();
   const demandByProduct = new Map<ID, number>();
-  const staleSkus = new Set(HANDSETS.filter((h) => h.stale).map((h) => h.sku));
+  const handsets = realHandsetSeeds();
+  const staleSkus = new Set(handsets.filter((h) => h.stale).map((h) => h.sku));
   const phoneSuppliers = [suppliers[0]!, suppliers[1]!, suppliers[4]!];
   const accSupplier = suppliers[2]!;
   const voucherSupplier = suppliers[3]!;
 
   const windowStart = new Date(startOfJakartaDay(asOf) - (days - 1) * DAY_MS).toISOString();
 
-  for (const h of HANDSETS) {
+  for (const h of handsets) {
     const supplier = phoneSuppliers[products.length % phoneSuppliers.length]!;
     const p: Product = {
       id: uid("prd"),
@@ -436,6 +402,7 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
   const accessories = products.filter((p) => p.kind === "accessory");
   const vouchers = products.filter((p) => p.kind === "voucher");
   const services = products.filter((p) => p.kind === "service");
+  const phoneByLabel = new Map(phones.map((p) => [p.name.toLowerCase(), p]));
 
   /* --------------------------------------------------------------- kas */
 
@@ -482,9 +449,8 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
 
   /* ------------------------------------------------------ simulasi harian */
 
-  /* Kas berjalan dipakai untuk membatasi belanja stok. Inilah mekanisme
-     krisisnya: kas menipis, belanja stok dipotong, stok terkuras, penjualan
-     ikut turun. */
+  /* Kas berjalan dipakai untuk membatasi belanja stok: saat kas menipis,
+     anggaran belanja stok dipotong. */
   let cashRunning = sumAccountsOpening(accounts);
 
   const sales: Sale[] = [];
@@ -523,13 +489,16 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
     factor *= 1 - (d / days) ** 1.4 * 0.34;
     factor *= 1 + rng.gauss(0, 0.12);
 
-    const phoneCount = Math.max(0, Math.round(rng.gauss(3.4 * factor, 1.6)));
+    /* Penjualan handset hari ini datang dari catatan nyata konter, bukan
+       dibangkitkan. Aksesori, voucher, dan jasa tetap dibangkitkan. */
+    const realToday = REAL_SALES_BY_DATE.get(dayKeyStr) ?? [];
+    const phoneCount = realToday.length;
     const accCount = Math.max(1, Math.round(rng.gauss(13 * factor, 3.8)));
     const voucherCount = Math.max(0, Math.round(rng.gauss(8 * factor, 2.8)));
     const serviceCount = Math.max(0, Math.round(rng.gauss(2.4 * factor, 1.4)));
 
     /* Anggaran belanja stok hari ini. Mendekati HPP hari ini, lalu dipotong
-       kalau kas sudah menipis. Inilah mekanisme krisisnya. */
+       kalau kas sudah menipis. */
     const cogsEstimate = phoneCount * 2_300_000 + accCount * 34_000 + voucherCount * 24_000;
     const wantBudget = rng.round500(rng.gauss(cogsEstimate * (1.25 + rng.next() * 0.15), 300_000));
     const throttle =
@@ -563,33 +532,50 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
 
       /* ---- baris utama ---- */
       if (isPhone) {
-        const available = phones.filter((p) => (qtyByProduct.get(p.id) ?? 0) > 0);
-        if (available.length === 0) continue;
-        const product = pickWeighted(
-          rng,
-          available.map((p) => ({
-            p,
-            /* Model lama sudah tidak dicari pembeli sama sekali di konter ini.
-               Barangnya tetap di etalase sebagai stok mati. */
-            demand: staleSkus.has(p.sku) ? 0 : (demandByProduct.get(p.id) ?? 1),
-          }))
-        ).p;
-        const unit = units.find((u) => u.productId === product.id && u.status === "in_stock");
-        if (!unit) continue;
+        const real = realToday[t];
+        const product = real === undefined ? undefined : phoneByLabel.get(real.label.toLowerCase());
+        if (!real || !product) continue;
 
-        const marginPct = product.price / product.cost - 1;
-        /* Margin handset menipis karena perang harga: kanibalisasi sepanjang periode. */
-        const erodedPrice = rng.round500(product.price * (1 - (d / days) * 0.045));
-        const nego = rng.chance(0.42) ? rng.next() * Math.max(0, Math.min(0.75, marginPct - 0.015)) : 0;
-        const negoPrice = rng.round500(erodedPrice * (1 - nego));
-        const aggressive = rng.chance(0.045);
-        const finalPrice = aggressive
-          ? rng.round500(product.cost * (0.965 + rng.next() * 0.03))
-          : Math.max(negoPrice, product.minPrice);
+        /* Unit dari stok awal; kalau habis, barang dibuat seperti baru datang
+           dari supplier beberapa hari sebelum terjual. */
+        let unit = units.find((u) => u.productId === product.id && u.status === "in_stock");
+        if (!unit) {
+          const receivedAt = new Date(Date.parse(real.iso) - 3 * DAY_MS).toISOString();
+          unit = {
+            id: uid("unt"),
+            productId: product.id,
+            imei1: makeImei(rng),
+            imei2: rng.chance(0.7) ? makeImei(rng) : null,
+            serial: null,
+            cost: product.cost,
+            status: "in_stock",
+            warrantyMonths: 12,
+            receivedAt,
+            soldAt: null,
+          };
+          units.push(unit);
+          qtyByProduct.set(product.id, (qtyByProduct.get(product.id) ?? 0) + 1);
+          movements.push({
+            id: uid("mov"),
+            productId: product.id,
+            unitId: unit.id,
+            qtyDelta: 1,
+            reason: "purchase",
+            refType: "po",
+            refId: null,
+            unitCost: product.cost,
+            note: `Pembelian ${product.sku}`,
+            occurredAt: receivedAt,
+            actorId: owner.id,
+          });
+        }
+
+        /* Harga jual diambil apa adanya dari catatan konter. */
+        const finalPrice = real.price;
         const discount = Math.max(0, product.price - finalPrice);
         qtyByProduct.set(product.id, (qtyByProduct.get(product.id) ?? 0) - 1);
         unit.status = "sold";
-        unit.soldAt = new Date(dayStartMs + 12 * 3_600_000).toISOString();
+        unit.soldAt = real.iso;
         const mv: StockMovement = {
           id: uid("mov"),
           productId: product.id,
@@ -600,7 +586,7 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
           refId: null,
           unitCost: unit.cost,
           note: `Terjual ${unit.imei1}`,
-          occurredAt: unit.soldAt,
+          occurredAt: real.iso,
           actorId: cashier.id,
         };
         movements.push(mv);
@@ -683,9 +669,14 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
         });
       }
 
-      const hour = 9 + Math.floor((t / Math.max(1, txnCount)) * 12);
-      const minute = rng.int(0, 59);
-      const occurredAt = new Date(dayStartMs + hour * 3_600_000 + minute * 60_000).toISOString();
+      /* Penjualan handset memakai jam asli dari catatan konter. */
+      let occurredAt = new Date(
+        dayStartMs + (9 + Math.floor((t / Math.max(1, txnCount)) * 12)) * 3_600_000 + rng.int(0, 59) * 60_000
+      ).toISOString();
+      if (isPhone) {
+        const real = realToday[t];
+        if (real) occurredAt = real.iso;
+      }
 
       /* ---- upsell aksesori saat jual handset ---- */
       if (isPhone && rng.chance(0.46)) {
@@ -738,13 +729,18 @@ export function generateDataset(opts: GenerateOptions = {}): Dataset {
 
       /* ---- metode bayar ---- */
       let method: PaymentMethod = "cash";
-      const roll = rng.next();
-      if (roll < 0.42) method = "cash";
-      else if (roll < 0.72) method = "qris";
-      else if (roll < 0.82) method = "transfer";
-      else if (roll < 0.9) method = "ewallet";
-      else if (roll < 0.96) method = "edc";
-      else method = "credit";
+      const realMethod = isPhone ? realToday[t]?.method : null;
+      if (realMethod) {
+        method = realMethod;
+      } else {
+        const roll = rng.next();
+        if (roll < 0.42) method = "cash";
+        else if (roll < 0.72) method = "qris";
+        else if (roll < 0.82) method = "transfer";
+        else if (roll < 0.9) method = "ewallet";
+        else if (roll < 0.96) method = "edc";
+        else method = "credit";
+      }
 
       const customerId: ID | null = rng.chance(isPhone ? 0.62 : 0.3) ? rng.pick(customers).id : null;
       const customer = customerId === null ? null : customers.find((c) => c.id === customerId) ?? null;

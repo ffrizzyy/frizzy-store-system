@@ -138,7 +138,7 @@ function TeamWorkspace({
           sub="Butuh verifikasi ulang saat masuk"
         />
         <Kpi
-          label="Sesi aktif (contoh)"
+          label="Sesi aktif"
           value={data.devices.length}
           format="number"
           sub="Kebijakan: 8 jam idle staf, 7 hari maksimum"

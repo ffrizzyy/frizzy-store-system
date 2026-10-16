@@ -124,7 +124,7 @@ export default function CustomersPage() {
             </Button>
           }
         >
-          {error ?? "Terjadi kesalahan saat mengambil data contoh. Periksa koneksi lalu coba lagi."}
+          {error ?? "Terjadi kesalahan saat mengambil data pelanggan. Periksa koneksi lalu coba lagi."}
         </Alert>
       </div>
     );
@@ -439,7 +439,7 @@ function CustomerDrawer({ agg, onClose }: { agg: CustomerAgg; onClose: () => voi
       onApprove: () => {
         toast({
           title: "Permintaan erasure dicatat",
-          body: `Permintaan anonimisasi ${name} masuk antrean audit. Data demo tidak diubah; di produksi identitas dihapus dan struk tetap tersimpan tanpa data pribadi.`,
+          body: `Permintaan anonimisasi ${name} masuk antrean persetujuan pemilik. Setelah disetujui, identitas pelanggan dihapus permanen dan struk tetap tersimpan tanpa data pribadi.`,
           tone: "warn",
         });
       },

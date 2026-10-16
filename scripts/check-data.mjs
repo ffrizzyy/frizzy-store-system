@@ -15,7 +15,7 @@ const outDir = path.join(root, ".check");
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 
-const COPIES = ["types.ts", "money.ts", "constants.ts", "generator.ts", "metrics.ts"];
+const COPIES = ["types.ts", "money.ts", "constants.ts", "penjualan-nyata.ts", "realSales.ts", "generator.ts", "metrics.ts"];
 for (const f of COPIES) {
   let code = await readFile(path.join(srcDir, f), "utf8");
   code = code.replace(/from "\.\/([A-Za-z0-9_-]+)"/g, 'from "./$1.ts"');

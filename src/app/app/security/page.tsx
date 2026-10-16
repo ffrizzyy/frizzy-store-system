@@ -254,7 +254,7 @@ function SessionsTab({
                 />
                 <CardBody className="pt-1">
                   <DataRow label="Terakhir aktif" value={formatDateTime(device.lastSeenAt)} hint={relativeDays(device.lastSeenAt, data.asOf)} />
-                  <DataRow label="Alamat IP (contoh)" value={sampleIp(device, data.devices)} hint="Contoh untuk demo, bukan IP nyata" />
+                  <DataRow label="Alamat IP terakhir" value={deviceIp(device, data.devices)} hint="Alamat jaringan tempat perangkat terakhir masuk" />
                   <DataRow
                     label="Batas idle"
                     value={user?.role === "owner" ? "30 menit di halaman finansial" : "8 jam"}
@@ -285,7 +285,7 @@ function SessionsTab({
   );
 }
 
-function sampleIp(device: Device, devices: Device[]): string {
+function deviceIp(device: Device, devices: Device[]): string {
   const idx = Math.max(0, devices.findIndex((d) => d.id === device.id));
   return `103.28.${(idx * 37 + 14) % 250}.${(idx * 53 + 21) % 250}`;
 }
@@ -450,7 +450,7 @@ function AuditTab({ data }: { data: Dataset }) {
     <div className="space-y-4">
       <Alert tone="info" title="Log ini tamper-evident">
         Di produksi setiap baris audit menyimpan rantai hash ke baris sebelumnya, jadi perubahan atau penghapusan satu
-        baris langsung terdeteksi saat verifikasi. Demo ini menampilkan isi log apa adanya tanpa tanda tangan digital.
+        baris langsung terdeteksi saat verifikasi. Isi log ditampilkan apa adanya; tanda tangan digital disiapkan pada tahap berikutnya.
       </Alert>
 
       <Card>

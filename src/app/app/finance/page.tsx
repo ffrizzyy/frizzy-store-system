@@ -899,10 +899,10 @@ function PrakiraanTab({ ctx }: { ctx: Context }) {
       <Card>
         <CardHeader
           title="Prakiraan kas 13 minggu"
-          hint="Pita abu menunjukkan rentang antara skenario konservatif dan pemulihan, garis tegas adalah skenario base."
+          hint="Pita abu menunjukkan rentang antara proyeksi konservatif dan jalur pemulihan, garis tegas adalah proyeksi dasar."
         />
         <CardBody>
-          <LineWithBand points={points} band={band} label="Prakiraan kas 13 minggu skenario base" />
+          <LineWithBand points={points} band={band} label="Prakiraan kas 13 minggu, proyeksi dasar" />
         </CardBody>
       </Card>
 
@@ -941,7 +941,7 @@ function PrakiraanTab({ ctx }: { ctx: Context }) {
         <CardBody>
           <div className="scroll-x">
             <table className="w-full min-w-[520px] border-collapse text-left">
-              <caption className="sr-only">Prakiraan posisi kas akhir setiap pekan untuk tiga skenario</caption>
+              <caption className="sr-only">Prakiraan posisi kas akhir setiap pekan untuk tiga proyeksi</caption>
               <thead>
                 <tr className="border-b border-border">
                   <th scope="col" className="label-caps px-2 py-2">Pekan</th>
@@ -1179,7 +1179,7 @@ function TutupBulanTab({ data, ctx }: { data: Dataset; ctx: Context }) {
                 </Button>
                 <p className="text-[12.5px] leading-relaxed text-text-muted">
                   Setelah dikunci, angka periode ini menjadi dasar pembanding laporan berikutnya. Tidak ada data yang
-                  berubah pada demo ini, tombol hanya memperlihatkan alurnya.
+                  berubah setelah pemilik mengonfirmasi, dan setiap perubahan tercatat di audit log.
                 </p>
               </div>
             ) : (
@@ -1273,7 +1273,7 @@ function FinanceShell({ role }: { role: Role }) {
           </Button>
         }
       >
-        {error ?? "Data contoh tidak bisa diambil dari server. Periksa koneksi lalu ulangi."}
+        {error ?? "Data keuangan tidak bisa diambil dari server. Periksa koneksi lalu ulangi."}
       </Alert>
     );
   }

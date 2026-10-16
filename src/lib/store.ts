@@ -2,8 +2,8 @@
 
 /* ============================================================================
    Store sisi klien Frizzy.
-   Dataset kecil untuk demo ini dimuat dari /api/sample lalu seluruh metrik
-   dihitung di klien. Di produksi angka yang sama datang dari Postgres.
+   Dataset operasional dimuat dari /api/sample lalu seluruh metrik dihitung di
+   klien. Di produksi angka yang sama datang dari Postgres.
    ========================================================================= */
 
 import { create } from "zustand";
@@ -66,6 +66,35 @@ export type Mutation =
   | { type: "add_customer"; name: string; phone: string; email: string | null; consent: boolean };
 
 const id = (prefix: string): ID => `${prefix}_${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-3)}`;
+
+/* Digit cek Luhn, dipakai saat membuat IMEI unit handset baru dari penyesuaian stok. */
+function luhnCheckDigit(digits: string): string {
+  let sum = 0;
+  let alt = true;
+  for (let i = digits.length - 1; i >= 0; i--) {
+    let n = Number(digits[i]);
+    if (alt) {
+      n *= 2;
+      if (n > 9) n -= 9;
+    }
+    sum += n;
+    alt = !alt;
+  }
+  return String((10 - (sum % 10)) % 10);
+}
+
+/* IMEI 15 digit yang belum terpakai, untuk unit handset hasil penyesuaian stok. */
+function makeImei(existing: Set<string>): string {
+  for (;;) {
+    const body = `3512${String(Math.floor(100000 + Math.random() * 899999))}${String(
+      Math.floor(100000 + Math.random() * 899999)
+    )}`
+      .slice(0, 14)
+      .padEnd(14, "0");
+    const imei = body + luhnCheckDigit(body);
+    if (!existing.has(imei)) return imei;
+  }
+}
 
 type State = {
   data: Dataset | null;
@@ -500,14 +529,54 @@ export const useFrizzy = create<State>((set, get) => ({
       case "adjust_stock": {
         const product = data.products.find((p) => p.id === m.productId);
         if (!product) return;
+        /* Produk berseri (handset) dihitung dari unit IMEI, bukan dari ledger
+           pergerakan. Penyesuaian qty harus ikut membuat atau menarik unit,
+           supaya angka stok di tabel dan angka pada ledger tetap sinkron. */
+        let units = data.units;
+        let firstUnitId: ID | null = null;
+        if (product.isSerialized && m.qtyDelta !== 0) {
+          const unitList = data.units.map((u) => ({ ...u }));
+          if (m.qtyDelta > 0) {
+            const existing = new Set(unitList.flatMap((u) => [u.imei1, u.imei2].filter((x): x is string => !!x)));
+            for (let i = 0; i < m.qtyDelta; i++) {
+              const unit: InventoryUnit = {
+                id: id("unt"),
+                productId: m.productId,
+                imei1: makeImei(existing),
+                imei2: null,
+                serial: null,
+                cost: product.cost,
+                status: "in_stock",
+                warrantyMonths: 12,
+                receivedAt: nowIso,
+                soldAt: null,
+              };
+              existing.add(unit.imei1);
+              unitList.push(unit);
+              if (!firstUnitId) firstUnitId = unit.id;
+            }
+          } else {
+            let toRemove = Math.abs(m.qtyDelta);
+            for (const u of unitList) {
+              if (toRemove === 0) break;
+              if (u.productId === m.productId && u.status === "in_stock") {
+                u.status = "returned";
+                if (!firstUnitId) firstUnitId = u.id;
+                toRemove -= 1;
+              }
+            }
+          }
+          units = unitList;
+        }
         next = {
           ...data,
+          units,
           movements: [
             ...data.movements,
             {
               id: id("mov"),
               productId: m.productId,
-              unitId: null,
+              unitId: firstUnitId,
               qtyDelta: m.qtyDelta,
               reason: m.reason,
               refType: "manual",

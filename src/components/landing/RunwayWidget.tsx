@@ -36,11 +36,11 @@ export function RunwayWidget() {
     return (
       <div className="card px-5 py-6">
         <p className="text-[13px] text-text-muted">
-          Angka contoh tidak bisa dimuat. Buka{" "}
-          <Link href="/demo" className="underline underline-offset-2">
-            mode demo
+          Angka konter tidak bisa dimuat. Buka{" "}
+          <Link href="/data-konter" className="underline underline-offset-2">
+            halaman data konter
           </Link>{" "}
-          untuk mencoba lagi.
+          untuk detailnya.
         </p>
       </div>
     );
@@ -78,7 +78,7 @@ export function RunwayWidget() {
           <span className={`live-dot inline-block h-2 w-2 rounded-full ${dot}`} />
           <span className="label-caps">Cash runway hari ini</span>
         </span>
-        <span className="num text-[11px] text-text-faint">data contoh 180 hari</span>
+        <span className="num text-[11px] text-text-faint">{h.days} hari terakhir</span>
       </div>
 
       <div className="px-5 py-5">
@@ -126,14 +126,14 @@ export function RunwayWidget() {
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <Link
-            href="/demo"
+            href="/data-konter"
             className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-accent px-5 text-[14px] font-medium text-on-accent transition-colors hover:bg-accent-hover"
           >
-            Coba demo langsung
+            Lihat data konter
             <ArrowRight size={16} weight="bold" />
           </Link>
           <span className="inline-flex items-center gap-1.5 text-[11.5px] text-text-faint">
-            <ShieldCheck size={14} /> Data sintetis, tidak ada data pelanggan asli
+            <ShieldCheck size={14} /> Dihitung dari catatan penjualan, stok, dan kas konter
           </span>
         </div>
       </div>

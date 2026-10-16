@@ -355,7 +355,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               ))}
             </ul>
             <div className="flex items-center gap-2 border-t border-border px-4 py-2.5 text-[11.5px] text-text-faint">
-              <CloudCheck size={15} /> Data contoh deterministik, aman untuk dibagikan
+              <CloudCheck size={15} /> Angka dihitung dari ledger yang sama dengan laporan
             </div>
           </div>
         </div>

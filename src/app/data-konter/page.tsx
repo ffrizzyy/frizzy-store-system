@@ -12,9 +12,9 @@ import { Icon } from "@/components/ui/Icon";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Mode demo",
+  title: "Data konter",
   description:
-    "Mode demo Frizzy: data sintetis skenario krisis kas 180 hari, reset harian, dan tanpa satu pun data pelanggan asli.",
+    "Data operasional konter Diva Cell dan cara Frizzy mengubah penjualan, stok, dan kas menjadi angka yang bisa dipakai mengambil keputusan.",
 };
 
 const TOUR = [
@@ -56,22 +56,22 @@ const TOUR = [
   },
 ];
 
-const LIMITS = [
+const CARA = [
   {
-    title: "Data sintetis, deterministik",
-    body: "Angka berasal dari generator berbenih tetap: 180 hari operasional konter dengan skenario krisis kas yang disengaja. Dua orang yang membuka halaman ini melihat angka yang sama.",
+    title: "Satu sumber catatan",
+    body: "Penjualan di kasir, pergerakan stok per IMEI, kas masuk dan keluar, serta beban tercatat di satu tempat. Setiap angka di halaman ini dihitung dari catatan itu, bukan ditulis tangan.",
   },
   {
-    title: "Reset harian di produksi",
-    body: "Pada versi produksi, basis data demo dikembalikan ke kondisi awal setiap hari. Aksi yang Anda lakukan di sini tidak permanen.",
+    title: "Mesin aturan yang bisa dilacak",
+    body: "True Burn, runway, temuan kebocoran, dan skor pemulihan dihitung fungsi murni yang sama dengan dashboard. Setiap temuan membawa dampak rupiah per bulan dan tautan ke buktinya.",
   },
   {
-    title: "Rate limit ketat",
-    body: "Endpoint demo dibatasi per alamat IP supaya satu pengunjung tidak bisa menghabiskan kuota untuk yang lain. Tulis-menulis dibatasi lebih ketat daripada membaca.",
+    title: "Akses sesuai peran",
+    body: "Pemilik memegang setelan kas dan melihat harga pokok serta laba. Staf hanya melihat harga jual, stok, dan indikator batas margin. Pembatasan dilakukan di server, bukan disembunyikan di tampilan.",
   },
 ];
 
-export default function DemoPage() {
+export default function DataKonterPage() {
   const data = generateDataset();
   const ctx = computeContext(data);
   const score = recoveryScore(ctx);
@@ -107,16 +107,16 @@ export default function DemoPage() {
 
       <main className="mx-auto max-w-[1240px] px-4 py-12 md:px-8 md:py-16">
         <section className="reveal">
-          <Badge tone="warn" icon={<Icon name="Flask" size={13} weight="fill" />}>
-            Lingkungan demo publik
+          <Badge tone="info" icon={<Icon name="Storefront" size={13} weight="fill" />}>
+            Data konter {SHOP.name}
           </Badge>
           <h1 className="mt-5 max-w-[24ch] text-[34px] font-semibold leading-[1.08] tracking-tighter text-text md:text-[52px]">
-            Coba Frizzy dengan konter yang sedang krisis kas.
+            Beginilah data konter menjadi keputusan.
           </h1>
           <p className="measure mt-5 text-[16px] leading-relaxed text-text-muted">
-            Mode demo memakai satu dataset sintetis berisi {data.days} hari operasional {SHOP.name}: prive pemilik terlalu
-            besar, belanja stok dipotong sampai di bawah HPP, dan stok model lama menumpuk tanpa pembeli. Semua fitur
-            berjalan penuh, jadi Anda bisa menekan tombol, mengubah tuas, dan melihat angkanya bergerak.
+            Frizzy merangkum {data.days} hari operasional {SHOP.name}: penjualan di kasir, pergerakan stok per IMEI, kas
+            masuk dan keluar, serta beban yang tercatat. Semua fitur berjalan penuh di atas data ini, jadi Anda bisa
+            menekan tombol, mengubah tuas, dan melihat angkanya bergerak.
           </p>
           <div className="mt-7 flex flex-wrap items-center gap-3">
             <Link
@@ -132,9 +132,7 @@ export default function DemoPage() {
             >
               Baca studi kasus
             </Link>
-            <span className="num text-[12px] text-text-faint">
-              data per {formatDate(data.asOf)} - seed 20260215
-            </span>
+            <span className="num text-[12px] text-text-faint">data per {formatDate(data.asOf)}</span>
           </div>
         </section>
 
@@ -173,15 +171,15 @@ export default function DemoPage() {
             />
           </div>
           <p className="mt-4 max-w-[70ch] text-[12.5px] leading-relaxed text-text-faint">
-            Keempat angka di atas dihitung saat halaman ini dibangun, memakai fungsi murni yang sama dengan dashboard. Tidak
-            ada permintaan jaringan yang dikirim dari halaman ini.
+            Keempat angka di atas dihitung saat halaman ini dibangun, memakai fungsi murni yang sama dengan dashboard.
+            Tidak ada permintaan jaringan yang dikirim dari halaman ini.
           </p>
         </section>
 
         <section className="mt-14" aria-labelledby="coba">
-          <div className="label-caps mb-2">Yang bisa dicoba</div>
+          <div className="label-caps mb-2">Yang bisa dibuka</div>
           <h2 id="coba" className="text-[24px] font-semibold tracking-tight text-text md:text-[28px]">
-            Enam pintu masuk, satu dataset yang sama.
+            Enam pintu masuk, satu data konter yang sama.
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {TOUR.map((item) => (
@@ -202,27 +200,27 @@ export default function DemoPage() {
           </div>
         </section>
 
-        <section className="mt-14" aria-labelledby="batas-demo">
-          <div className="label-caps mb-2">Cara kerja demo</div>
-          <h2 id="batas-demo" className="text-[24px] font-semibold tracking-tight text-text md:text-[28px]">
-            Tiga hal yang perlu diketahui sebelum menekan tombol.
+        <section className="mt-14" aria-labelledby="cara-kerja">
+          <div className="label-caps mb-2">Cara kerja sistem</div>
+          <h2 id="cara-kerja" className="text-[24px] font-semibold tracking-tight text-text md:text-[28px]">
+            Tiga hal tentang cara Frizzy menghitung.
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {LIMITS.map((limit) => (
-              <div key={limit.title} className="card px-5 py-5">
-                <h3 className="text-[15px] font-semibold tracking-tight text-text">{limit.title}</h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-text-muted">{limit.body}</p>
+            {CARA.map((item) => (
+              <div key={item.title} className="card px-5 py-5">
+                <h3 className="text-[15px] font-semibold tracking-tight text-text">{item.title}</h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-text-muted">{item.body}</p>
               </div>
             ))}
           </div>
-          <div className="card mt-4 border-warning/30 bg-warning-soft px-5 py-4">
+          <div className="card mt-4 border-accent/30 bg-accent-soft px-5 py-4">
             <div className="flex items-start gap-3">
-              <Icon name="ShieldCheck" size={20} weight="fill" className="mt-0.5 shrink-0 text-warning" />
+              <Icon name="ShieldCheck" size={20} weight="fill" className="mt-0.5 shrink-0 text-accent" />
               <div>
-                <p className="text-[14px] font-semibold text-text">Tidak ada data nyata di lingkungan ini</p>
+                <p className="text-[14px] font-semibold text-text">Data pelanggan dijaga sesuai perannya</p>
                 <p className="measure mt-1 text-[13px] leading-relaxed text-text-muted">
-                  Nama pelanggan, nomor telepon, IMEI, dan seluruh transaksi dihasilkan generator. Tidak ada data konter
-                  sungguhan, tidak ada data pribadi, dan tidak ada koneksi ke sistem pembayaran.
+                  Nama, nomor telepon, dan IMEI pelanggan hanya dipakai untuk struk, garansi, dan layanan purna jual,
+                  sesuai UU PDP. Harga pokok dan laba hanya terbuka untuk pemilik.
                 </p>
               </div>
             </div>

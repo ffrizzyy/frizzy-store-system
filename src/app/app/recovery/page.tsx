@@ -156,7 +156,7 @@ function RecoveryScreen() {
       <div className="mx-auto max-w-[560px] py-16">
         <Alert
           tone="danger"
-          title="Data contoh gagal dimuat"
+          title="Data pemulihan gagal dimuat"
           action={
             <Button
               variant="secondary"
@@ -770,7 +770,7 @@ function LeakTab({ ctx, leaks }: { ctx: Context; leaks: LeakFinding[] }) {
           <div className="scroll-x">
             <table className="w-full min-w-[760px] text-left">
               <caption className="sr-only">
-                Daftar aturan Leak Detector beserta pemicu, tindakan, dan temuan pada data contoh
+                Daftar aturan Leak Detector beserta pemicu, tindakan, dan temuan terkini
               </caption>
               <thead>
                 <tr className="border-b border-border">
@@ -1399,7 +1399,9 @@ function WhatIfTab({ ctx }: { ctx: Context }) {
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="num text-[15px] text-text-faint line-through">{formatNumber(result.baseRunwayDays, 0)}</span>
-              <span className="num text-[30px] font-semibold text-text">{formatNumber(result.runwayDays, 0)}</span>
+              <span className="num text-[30px] font-semibold text-text" data-testid="whatif-runway">
+                {formatNumber(result.runwayDays, 0)}
+              </span>
               <span className="text-[12px] text-text-faint">hari</span>
             </div>
             <p className="mt-1.5 text-[12px] leading-snug text-text-muted">
@@ -1425,7 +1427,7 @@ function WhatIfTab({ ctx }: { ctx: Context }) {
               </span>
             </div>
             <p className="mt-1.5 text-[12px] leading-snug text-text-muted">
-              Impas penjualan {formatCompact(result.breakEvenSalesPerDay)} per hari pada margin skenario.
+              Impas penjualan {formatCompact(result.breakEvenSalesPerDay)} per hari pada margin proyeksi.
             </p>
           </CardBody>
         </Card>
@@ -1460,15 +1462,15 @@ function WhatIfTab({ ctx }: { ctx: Context }) {
           hint="Garis adalah skenario. Pita menunjukkan rentang antara jalur dasar dan jalur skenario."
         />
         <CardBody>
-          <LineWithBand points={weeklyPoints} band={weeklyBand} label="Kas 13 minggu, dasar vs skenario" />
+          <LineWithBand points={weeklyPoints} band={weeklyBand} label="Kas 13 minggu, dasar vs proyeksi" />
           <div className="mt-3 flex flex-wrap items-center gap-4 text-[11.5px] text-text-faint">
             <span className="inline-flex items-center gap-1.5">
               <span className="h-0.5 w-5 rounded-full bg-accent" aria-hidden="true" />
-              Kas skenario
+              Kas proyeksi
             </span>
             <span className="inline-flex items-center gap-1.5">
               <span className="h-2.5 w-5 rounded-full bg-accent/20" aria-hidden="true" />
-              Rentang dasar ke skenario
+              Rentang dasar ke proyeksi
             </span>
           </div>
         </CardBody>

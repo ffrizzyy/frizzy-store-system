@@ -1,0 +1,27 @@
+# Menjalankan Frizzy di produksi lewat Docker Compose.
+#   docker compose up -d --build
+#   docker compose ps
+#   curl http://localhost:3000/api/health
+#
+# Ingin memuat variabel dari .env? Tambahkan:
+#   env_file: [".env"]
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: frizzy:latest
+    container_name: frizzy-web
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: 0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

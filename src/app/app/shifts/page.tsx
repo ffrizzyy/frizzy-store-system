@@ -339,7 +339,7 @@ export default function ShiftsPage() {
           </Button>
         }
       >
-        {error ?? "Data contoh tidak bisa diambil dari server. Periksa koneksi lalu ulangi."}
+        {error ?? "Data shift tidak bisa diambil dari server. Periksa koneksi lalu ulangi."}
       </Alert>
     );
   }

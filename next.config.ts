@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  /* Hasilkan server mandiri (.next/standalone) agar image Docker kecil:
+     Node server plus hanya dependensi runtime yang benar-benar dipakai. */
+  output: "standalone",
   experimental: {
     optimizePackageImports: ["@phosphor-icons/react", "recharts"],
   },

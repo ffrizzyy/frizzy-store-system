@@ -15,7 +15,7 @@
     "check:data": "node scripts/check-data.mjs",
     "check:links": "node scripts/audit-links.mjs",
     "check": "node scripts/audit-links.mjs && tsc --noEmit",
-    "icons": "python scripts/make-icon.py"
+    "icons": "node scripts/make-icon.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

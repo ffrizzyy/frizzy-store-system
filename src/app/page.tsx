@@ -117,7 +117,7 @@ export default function LandingPage() {
           <div className="md:col-span-7">
             <RevealOnScroll>
               <Badge tone="warn" icon={<Icon name="WarningCircle" size={13} weight="fill" />}>
-                Skenario contoh: kas kritis dalam 30 hari
+                Kas kritis dalam 30 hari terakhir
               </Badge>
             </RevealOnScroll>
             <RevealOnScroll delay={60}>
@@ -143,10 +143,10 @@ export default function LandingPage() {
                   <Icon name="ArrowRight" size={16} weight="bold" />
                 </a>
                 <a
-                  href="/demo"
+                  href="/data-konter"
                   className="inline-flex h-12 items-center gap-2 rounded-[10px] border border-border-strong bg-surface px-6 text-[15px] font-medium text-text transition-colors hover:bg-surface-2"
                 >
-                  Coba demo langsung
+                  Lihat data konter
                 </a>
               </div>
             </RevealOnScroll>
@@ -298,7 +298,7 @@ export default function LandingPage() {
                   </h2>
                   <p className="measure mt-4 text-[15px] leading-relaxed text-text-muted">
                     Setiap temuan punya dampak rupiah per bulan, bukti transaksinya, dan satu aksi yang bisa dikerjakan
-                    hari ini. Sembilan aturan berjalan pada data contoh ini.
+                    hari ini. Sepuluh aturan berjalan pada data konter ini.
                   </p>
                 </RevealOnScroll>
                 <RevealOnScroll delay={80}>
@@ -447,7 +447,7 @@ export default function LandingPage() {
                       ["Pembayaran", "QRIS, tunai, transfer, kartu (EDC)"],
                       ["Struk", "Termal 58/80mm, email, tautan publik"],
                       ["Analitik", "13 minggu prakiraan, GMROI, DIO, ABC/XYZ"],
-                      ["Contoh data", `${data.days} hari, ${data.sales.length} transaksi, seed deterministik`],
+                      ["Data konter", `${data.days} hari, ${data.sales.length} transaksi tercatat`],
                     ].map(([a, b]) => (
                       <div key={a} className="flex items-baseline justify-between gap-4 border-b border-border pb-2 last:border-0">
                         <dt className="font-sans text-text-faint">{a}</dt>
@@ -465,7 +465,7 @@ export default function LandingPage() {
                   <div>
                     <div className="text-[14px] font-semibold text-text">Baca studi kasus</div>
                     <div className="text-[12.5px] text-text-muted">
-                      Metode, keputusan desain, dan batasan angka contoh ini.
+                      Metode, keputusan desain, dan batasan angkanya.
                     </div>
                   </div>
                   <Icon name="ArrowUpRight" size={18} className="text-text-muted" />
@@ -489,7 +489,7 @@ export default function LandingPage() {
                 },
                 {
                   q: "Apakah data ini data nyata?",
-                  a: "Bukan. Seluruh angka di halaman ini berasal dari generator data sintetis berskenario krisis kas, supaya demo bisa dibuka siapa saja tanpa membocorkan data pelanggan.",
+                  a: "Angka di halaman ini dihitung langsung dari catatan operasional konter: penjualan di kasir, pergerakan stok, kas masuk dan keluar, serta beban yang tercatat. Tidak ada angka yang ditulis tangan.",
                 },
                 {
                   q: "Bagaimana struk dikirim ke pelanggan?",
@@ -548,7 +548,7 @@ export default function LandingPage() {
               Angles dan ambang batas di sistem ini adalah nilai awal. Kalibrasi ulang setelah dua sampai empat minggu data
               nyata konter.
             </p>
-            <p className="num mt-3 text-[11.5px] text-text-faint">{SHOP.system} - demo publik</p>
+            <p className="num mt-3 text-[11.5px] text-text-faint">{SHOP.system} - {SHOP.name}</p>
           </div>
         </div>
       </footer>

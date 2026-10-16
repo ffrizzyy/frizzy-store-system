@@ -16,8 +16,8 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           <div>
             <h1 className="text-[19px] font-semibold tracking-tight text-text">Terjadi kesalahan</h1>
             <p className="measure mt-1.5 text-[13.5px] leading-relaxed text-text-muted">
-              Halaman ini tidak bisa ditampilkan. Coba muat ulang; bila tetap gagal, angka sementara bisa dilihat dari mode
-              demo.
+              Halaman ini tidak bisa ditampilkan. Coba muat ulang; bila tetap gagal, buka halaman data konter atau hubungi
+              pemilik.
             </p>
           </div>
           <p className="num w-full break-words rounded-[10px] border border-border bg-surface-2 px-4 py-3 text-[12px] text-text-muted">
@@ -29,10 +29,10 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
               Coba lagi
             </Button>
             <a
-              href="/demo"
+              href="/data-konter"
               className="inline-flex h-10 items-center rounded-[10px] border border-border-strong bg-surface px-4 text-sm font-medium text-text transition-colors hover:bg-surface-2"
             >
-              Buka mode demo
+              Lihat data konter
             </a>
           </div>
         </CardBody>

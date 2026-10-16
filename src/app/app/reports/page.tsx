@@ -203,7 +203,7 @@ const REPORTS: ReportEntry[] = [
     group: "Pelanggan",
     name: "Pelanggan berulang",
     summary: "Pelanggan dengan pembelian lebih dari sekali, nilai belanja, dan jarak antar kunjungan.",
-    period: "180 hari terakhir",
+    period: "Seluruh periode data",
     href: "/app/customers",
     hrefLabel: "Buka Pelanggan",
   },
@@ -513,7 +513,7 @@ export default function ReportsPage() {
           </Button>
         }
       >
-        {error ?? "Data contoh tidak bisa diambil dari server. Periksa koneksi lalu ulangi."}
+        {error ?? "Data laporan tidak bisa diambil dari server. Periksa koneksi lalu ulangi."}
       </Alert>
     );
   }

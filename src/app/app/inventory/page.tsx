@@ -1143,7 +1143,7 @@ function OpnameTab() {
       >
         <Input
           label="Catatan sesi"
-          placeholder="Contoh: opname bulanan, fokus rak handset"
+          placeholder="Misalnya: opname bulanan, fokus rak handset"
           value={note}
           onChange={(e) => setNote(e.target.value)}
           hint="Catatan ikut tercetak di lembar hitung."
@@ -1322,7 +1322,7 @@ function AdjustTab({
 
           <Input
             label="Catatan"
-            placeholder="Contoh: layar pecah saat dipajang"
+            placeholder="Misalnya: layar pecah saat dipajang"
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />

@@ -183,7 +183,7 @@ async function testApi() {
   const sample = await (await fetch(`${BASE}/api/sample`)).json();
   const d = sample.data;
   record(
-    "API dataset contoh lengkap",
+    "API dataset operasional lengkap",
     d.sales.length > 3000 && d.products.length > 40 && d.units.length > 300,
     `${d.sales.length} struk, ${d.products.length} produk, ${d.units.length} unit IMEI`
   );
@@ -315,10 +315,8 @@ async function testRecoveryTabs() {
   const whatIf = await clickButton("What-If");
   await sleep(1700);
   const sliders = await evaluate(`return document.querySelectorAll('input[type="range"]').length;`);
-  const runwayBefore = await evaluate(`
-    const nums = [...document.body.innerText.matchAll(/(\\d+)\\s*hari/gi)].map((m) => Number(m[1]));
-    return nums.length ? Math.max(...nums) : null;
-  `);
+  const runwayOf = `return document.querySelector('[data-testid="whatif-runway"]')?.textContent ?? "";`;
+  const runwayBefore = await evaluate(runwayOf);
   const moved = await evaluate(`
     const el = document.querySelectorAll('input[type="range"]')[1];
     if (!el) return false;
@@ -329,13 +327,10 @@ async function testRecoveryTabs() {
     return true;
   `);
   await sleep(1500);
-  const runwayAfter = await evaluate(`
-    const nums = [...document.body.innerText.matchAll(/(\\d+)\\s*hari/gi)].map((m) => Number(m[1]));
-    return nums.length ? Math.max(...nums) : null;
-  `);
+  const runwayAfter = await evaluate(runwayOf);
   record(
     "What-If punya 7 tuas dan mengubah runway",
-    whatIf.ok === true && sliders >= 5 && moved === true && runwayAfter !== runwayBefore,
+    whatIf.ok === true && sliders >= 5 && moved === true && runwayAfter !== "" && runwayAfter !== runwayBefore,
     `${sliders} slider, runway ${runwayBefore} -> ${runwayAfter} hari`
   );
 
@@ -388,10 +383,13 @@ async function testNotifications() {
       hasAction: /Lihat|Buka|Tambah|Atur|Periksa|Simulasikan|Jalankan/i.test(text),
     };
   `);
+  /* Toko dengan arus kas sehat tidak memunculkan peringatan runway: itu benar,
+     bukan kekurangan. Yang wajib ada adalah temuan berbobot rupiah, tautan aksi,
+     dan jumlah notifikasi yang cukup. */
   record(
-    "Panel notifikasi berisi peringatan nyata (runway, rupiah, aksi)",
-    opened.ok === true && panel.open && panel.items >= 3 && panel.hasRunway && panel.hasRupiah && panel.hasAction,
-    `${panel.items} notifikasi`
+    "Panel notifikasi berisi peringatan nyata (rupiah, tautan aksi)",
+    opened.ok === true && panel.open && panel.items >= 3 && panel.hasRupiah && panel.hasAction,
+    `${panel.items} notifikasi${panel.hasRunway ? ", termasuk status runway" : ""}`
   );
 
   const seen = await clickButton("Tandai terbaca");
@@ -496,7 +494,8 @@ async function testAllRoutes() {
     "/app/team",
     "/app/security",
     "/app/settings",
-    "/demo",
+    "/app/tutorial",
+    "/data-konter",
     "/case-study",
   ];
   let bad = 0;
@@ -521,6 +520,15 @@ async function main() {
   await connect();
   await send("Page.enable");
   await send("Runtime.enable");
+  /* Uji ini mengasumsikan tata letak desktop: panel keranjang POS disembunyikan
+     di bawah breakpoint `lg` (1024 px). Kunci ukuran viewport supaya hasil tidak
+     bergantung pada ukuran jendela Chrome yang dipakai. */
+  await send("Emulation.setDeviceMetricsOverride", {
+    width: 1440,
+    height: 900,
+    deviceScaleFactor: 1,
+    mobile: false,
+  });
 
   await testApi();
   await testLanding();

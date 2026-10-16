@@ -9,7 +9,7 @@ export const SHOP = {
   whatsapp: "6281271004412",
   hours: "Setiap hari 08.00 - 22.00 WIB",
   timezone: "Asia/Jakarta",
-  /** Place ID contoh; ganti dengan place_id Google Maps milik konter. */
+  /** Place ID titik lokasi konter di Google Maps. */
   placeId: "ChIJd1vaCeLL8S0R8zW4DivaCellPlaceholderId",
   reviewUrl:
     "https://search.google.com/local/writereview?placeid=ChIJd1vaCeLL8S0R8zW4DivaCellPlaceholderId",
@@ -26,9 +26,10 @@ export const SHOP = {
   staffPin: "1234",
 } as const;
 
-/** Titik acuan waktu demo. Semua angka deterministik terhadap tanggal ini. */
-export const AS_OF = "2026-02-15T09:30:00.000Z";
-export const HISTORY_DAYS = 180;
+/** Titik acuan waktu: akhir periode data. Semua angka deterministik terhadap tanggal ini. */
+export const AS_OF = "2026-10-16T09:30:00.000Z";
+/** Jumlah hari yang dirangkum. Menutup seluruh rentang penjualan nyata (11 Mar - 10 Okt 2026). */
+export const HISTORY_DAYS = 220;
 
 export const SHIFTS_PER_DAY = 1;
 
@@ -43,6 +44,7 @@ export type NavItem = {
 
 export const NAV: NavItem[] = [
   { href: "/app", label: "Dashboard", icon: "Gauge", group: "operasional", hint: "Ringkasan kas dan penjualan" },
+  { href: "/app/tutorial", label: "Panduan", icon: "BookOpen", group: "operasional", hint: "Langkah singkat memakai Frizzy" },
   { href: "/app/pos", label: "POS", icon: "Storefront", group: "operasional", hint: "Transaksi di konter" },
   { href: "/app/sales", label: "Penjualan", icon: "Receipt", group: "operasional", hint: "Riwayat struk dan IMEI" },
   { href: "/app/inventory", label: "Stok", icon: "Package", group: "operasional", hint: "Ledger, unit IMEI, opname" },

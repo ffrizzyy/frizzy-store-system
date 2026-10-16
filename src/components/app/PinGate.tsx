@@ -54,7 +54,7 @@ export function PinGate() {
       description="Aksi ini di luar batas wewenang kasir."
       footer={
         <div className="flex items-center justify-between gap-3">
-          <span className="num text-[11.5px] text-text-faint">PIN contoh: 2468</span>
+          <span className="text-[11.5px] text-text-faint">Berlaku untuk satu aksi</span>
           <div className="flex gap-2">
             <Button variant="ghost" onClick={clear}>
               Batalkan

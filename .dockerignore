@@ -1,0 +1,55 @@
+# --- Dependensi (dipasang ulang di dalam image) ---
+node_modules
+.pnpm-store
+**/node_modules
+
+# --- Hasil build (dibangun ulang di tahap builder) ---
+.next
+out
+build
+next-env.d.ts
+*.tsbuildinfo
+
+# --- Kontrol versi & meta repo ---
+.git
+.gitignore
+.github
+.vscode
+.idea
+.vercel
+.netlify
+
+# --- Rahasia & berkas lingkungan lokal (jangan pernah masuk image) ---
+.env
+.env.local
+.env*.local
+!.env.example
+
+# --- Skrip pemeriksa/skrip lokal yang tidak dibutuhkan build ---
+.check
+.check-diag.mts
+scripts
+
+# --- Data mentah: TIDAK diimpor saat build. Dataset aplikasi dibangkitkan
+#     oleh src/lib/generator.ts, jadi folder ini tidak perlu masuk image. ---
+data
+
+# --- Log, cache, screenshot, dan sampah OS/editor ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.eslintcache
+*.png.tmp
+screenshots
+screenshot
+*.screenshot.*
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Docker sendiri ---
+Dockerfile
+docker-compose.yml
+.dockerignore

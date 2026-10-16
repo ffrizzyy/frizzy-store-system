@@ -22,7 +22,7 @@ import {
   recoveryScore,
   topMovers,
 } from "@/lib/metrics";
-import { formatCompact, formatNumber, formatPct, formatRupiah, relativeDays } from "@/lib/money";
+import { formatCompact, formatDate, formatNumber, formatPct, formatRupiah, relativeDays } from "@/lib/money";
 import { Kpi, MiniBar, Sparkline } from "@/components/ui/Kpi";
 import { Card, CardBody, CardHeader, SectionTitle } from "@/components/ui/Card";
 import { Alert, Badge, EmptyState, Skeleton } from "@/components/ui/Feedback";
@@ -46,7 +46,7 @@ export default function DashboardPage() {
   if (status === "error") {
     return (
       <div className="mx-auto max-w-[720px] py-10">
-        <Alert tone="danger" title="Data contoh gagal dimuat">
+        <Alert tone="danger" title="Data dashboard gagal dimuat">
           {error ?? "Terjadi kesalahan tidak terduga."}
         </Alert>
         <div className="mt-4">
@@ -104,7 +104,7 @@ function OwnerDashboard() {
       <SectionTitle
         eyebrow={`Ringkasan ${range} hari`}
         title="Dashboard pemilik"
-        hint={`Data sampai ${relativeDays(data.asOf, data.asOf)} - ${formatNumber(data.sales.length)} transaksi contoh, ${data.days} hari riwayat.`}
+        hint={`Data sampai ${formatDate(data.asOf)} - ${formatNumber(data.sales.length)} transaksi tercatat, ${data.days} hari riwayat.`}
         right={
           <div className="flex items-center gap-2">
             {[30, 60, 90].map((r) => (
@@ -281,7 +281,7 @@ function OwnerDashboard() {
         <Card className="lg:col-span-2">
           <CardHeader
             title="Prakiraan kas 13 minggu"
-            hint="Tiga skenario: dasar, konservatif (penjualan turun), dan pemulihan (aksi dijalankan)."
+            hint="Tiga jalur prakiraan: dasar, konservatif (penjualan turun), dan pemulihan (aksi dijalankan)."
           />
           <CardBody>
             <ForecastTable weeks={forecast} />
@@ -333,7 +333,7 @@ function OwnerDashboard() {
         <Card>
           <CardHeader
             title="Penyumbang laba teratas"
-            hint="Diurutkan dari laba kotor pada 180 hari data contoh"
+            hint="Diurutkan dari laba kotor selama periode yang tercatat"
             action={
               <Link href="/app/products" className="text-[12.5px] font-medium text-accent hover:underline">
                 Produk
@@ -544,7 +544,7 @@ function ForecastTable({ weeks }: { weeks: ReturnType<typeof forecast13Weeks> })
     <div className="space-y-3">
       <div className="scroll-x">
         <table className="w-full min-w-[520px] text-[12.5px]">
-          <caption className="sr-only">Prakiraan kas 13 minggu untuk tiga skenario</caption>
+          <caption className="sr-only">Prakiraan kas 13 minggu untuk tiga jalur prakiraan</caption>
           <thead>
             <tr className="border-b border-border text-left text-[11px] uppercase tracking-wide text-text-faint">
               <th className="py-2 pr-3 font-medium">Minggu</th>

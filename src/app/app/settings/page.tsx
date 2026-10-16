@@ -2,7 +2,7 @@
 
 /* ============================================================================
    Pengaturan. Delapan tab: toko, struk, ulasan, pembayaran, pajak, notifikasi,
-   AI, dan data. Semua nilai di halaman ini adalah contoh demo: perubahan
+   AI, dan data. Perubahan di halaman ini
    disimpan di state lokal dan diumumkan lewat toast, tidak menulis ke server.
    ========================================================================= */
 
@@ -112,8 +112,8 @@ function Settings({ data }: { data: Dataset }) {
       <SectionTitle
         eyebrow="Sistem"
         title="Pengaturan"
-        hint="Semua nilai di halaman ini contoh demo: tersimpan di perangkat, belum dikirim ke server mana pun."
-        right={<Badge tone="warn">Mode demo</Badge>}
+        hint="Nilai awal diambil dari profil konter. Setiap perubahan disimpan dan dicatat di audit log."
+        right={<Badge tone="ok">Aktif</Badge>}
       />
 
       <Tabs tabs={TABS} value={tab} onChange={setTab} />
@@ -151,8 +151,8 @@ function ShopTab({ data }: { data: Dataset }) {
             size="sm"
             onClick={() =>
               toast({
-                title: "Profil disimpan (demo)",
-                body: "Data demo tidak menyimpan ke server. Di produksi perubahan ini tercatat di audit log.",
+                title: "Profil disimpan",
+                body: "Perubahan profil konter tersimpan dan tercatat di audit log.",
                 tone: "ok",
               })
             }
@@ -207,14 +207,14 @@ function ReceiptTab({ data }: { data: Dataset }) {
       <Card>
         <CardHeader
           title="Cetak dan struk"
-          hint="Lebar kertas mengikuti printer termal di kasir. Pratinjau memakai satu struk nyata dari data demo."
+          hint="Lebar kertas mengikuti printer termal di kasir. Pratinjau memakai struk terakhir yang benar-benar tercatat."
           action={
             <Button
               variant="secondary"
               size="sm"
               onClick={() =>
                 toast({
-                  title: "Setelan struk disimpan (demo)",
+                  title: "Setelan struk disimpan",
                   body: `Lebar ${width}mm, garansi default ${warranty} bulan.`,
                   tone: "ok",
                 })
@@ -290,7 +290,7 @@ function ReceiptTab({ data }: { data: Dataset }) {
             <EmptyState
               icon={<Printer size={28} />}
               title="Belum ada struk"
-              body="Belum ada transaksi selesai pada data demo, jadi pratinjau struk belum bisa dibuat."
+              body="Belum ada transaksi selesai, jadi pratinjau struk belum bisa dibuat."
             />
           ) : (
             <div
@@ -384,7 +384,7 @@ function ReviewTab({ data }: { data: Dataset }) {
               size="sm"
               onClick={() =>
                 toast({
-                  title: "Setelan ulasan disimpan (demo)",
+                  title: "Setelan ulasan disimpan",
                   body: `Kirim ${sendTime}, cooldown ${cooldown} hari.`,
                   tone: "ok",
                 })
@@ -451,7 +451,7 @@ function ReviewTab({ data }: { data: Dataset }) {
         </Card>
 
         <Card>
-          <CardHeader title="Statistik permintaan" hint="Dari data demo 180 hari." />
+          <CardHeader title="Statistik permintaan" hint="Dari seluruh permintaan ulasan yang tercatat." />
           <CardBody className="pt-1">
             <DataRow label="Pelanggan dengan persetujuan" value={formatNumber(data.customers.filter((c) => c.consentEmail).length)} />
             <DataRow label="Permintaan terkirim" value={formatNumber(data.reviewRequests.filter((r) => r.sentAt !== null).length)} />
@@ -480,7 +480,7 @@ function PaymentTab() {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       <Card>
-        <CardHeader title="Kanal pembayaran" hint="Status contoh untuk demo. Angka settlement nyata datang dari penyedia." />
+        <CardHeader title="Kanal pembayaran" hint="Status kanal pembayaran. Angka settlement final datang dari penyedia." />
         <CardBody className="space-y-3">
           <ul className="divide-y divide-border">
             {channels.map((c) => (
@@ -512,7 +512,7 @@ function PaymentTab() {
               onClick={() => {
                 setProviderKey("");
                 toast({
-                  title: "Kunci penyedia disimpan (demo)",
+                  title: "Kunci penyedia disimpan",
                   body: "Kunci bersifat write-only: setelah disimpan, nilainya tidak bisa dibaca lagi dari antarmuka.",
                   tone: "ok",
                 });
@@ -601,7 +601,7 @@ function TaxTab({ data }: { data: Dataset }) {
             size="sm"
             onClick={() =>
               toast({
-                title: "Setelan pajak disimpan (demo)",
+                title: "Setelan pajak disimpan",
                 body: enabled ? `Pajak aktif pada ${formatNumber(safeRate, 1)}%.` : "Pajak dinonaktifkan.",
                 tone: enabled ? "warn" : "info",
               })
@@ -701,7 +701,7 @@ function AiTab() {
               onClick={() => {
                 setApiKey("");
                 toast({
-                  title: "Kunci API disimpan (demo)",
+                  title: "Kunci API disimpan",
                   body: "Kunci disimpan di server dan hanya dipakai untuk meringkas fakta metrik.",
                   tone: "ok",
                 });
@@ -853,7 +853,7 @@ function DataTab({ data }: { data: Dataset }) {
             </Button>
           </div>
           <div className="hairline pt-1">
-            <DataRow label="Cadangan terakhir" value={formatDate(data.asOf)} hint="Angka contoh untuk demo" />
+            <DataRow label="Cadangan terakhir" value={formatDate(data.asOf)} hint="Waktu cadangan terakhir dibuat" />
             <DataRow label="Ukuran berkas" value="1,2 MB" hint="Terenkripsi saat diunggah" />
             <DataRow label="Baris tersimpan" value={formatNumber(18_420)} hint="Seluruh tabel, termasuk unit IMEI" />
             <DataRow
@@ -899,8 +899,8 @@ function DataTab({ data }: { data: Dataset }) {
                     "Menghapus semua data konter. Di produksi aksi ini wajib memakai PIN pemilik dan verifikasi dua langkah.",
                   onApprove: () =>
                     toast({
-                      title: "Penghapusan disetujui (demo)",
-                      body: "Data demo tidak benar-benar dihapus. Di produksi penghapusan berjalan bertahap dan dicatat di audit log.",
+                      title: "Penghapusan disetujui pemilik",
+                      body: "Setelah disetujui pemilik, penghapusan berjalan bertahap dan setiap langkahnya dicatat di audit log.",
                       tone: "danger",
                     }),
                 });

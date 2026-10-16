@@ -1,6 +1,6 @@
 /* ============================================================================
    Mesin metrik Frizzy. Semua angka dihitung di sini dengan aritmetika
-   deterministik (SQL/Python di produksi, fungsi murni di demo ini).
+   deterministik (SQL/Python di produksi, fungsi murni di sini).
    LLM tidak pernah menghitung angka; ia hanya menarasikan hasil dari sini.
    ========================================================================= */
 
